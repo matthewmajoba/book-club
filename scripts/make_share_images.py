@@ -125,9 +125,13 @@ def og():
     card.alpha_composite(logo, ((card_w - logo.width) // 2, 108))
     d = ImageDraw.Draw(card)
     f = ImageFont.truetype(VERDANA_B, 28)
-    tag = "CURL UP  ·  READ  ·  GOSSIP ABOUT IT"
-    tw = d.textlength(tag, font=f)
-    d.text(((card_w - tw) / 2, card_h - 128), tag, font=f, fill=(255, 217, 138))
+    star_f = ImageFont.truetype(SYM, 28)
+    tag = "LIKE GAME CLUB BUT FOR BOOKS"
+    tw, sw_ = d.textlength(tag, font=f), d.textlength("★", font=star_f)
+    x0, y0 = (card_w - tw - 2 * (sw_ + 16)) / 2, card_h - 128
+    d.text((x0, y0 - 1), "★", font=star_f, fill=(242, 193, 78))
+    d.text((x0 + sw_ + 16, y0), tag, font=f, fill=(255, 217, 138))
+    d.text((x0 + sw_ + 32 + tw, y0 - 1), "★", font=star_f, fill=(242, 193, 78))
     f2 = ImageFont.truetype(VERDANA_B, 21)
     sub = "pick a book  ·  vote with your 3 bookmarks  ·  chat  ·  read"
     sw = d.textlength(sub, font=f2)
