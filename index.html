@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Book Club</title>
+<meta name="description" content="Our cozy little book club. Pick a book, vote with your 3 bookmarks, chat, read.">
+<meta name="theme-color" content="#2a1410">
+<!-- link previews (texts, Discord, iMessage, etc.) -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Book Club">
+<meta property="og:title" content="Book Club">
+<meta property="og:description" content="Our cozy little book club. Pick a book, vote with your 3 bookmarks, chat, read.">
+<meta property="og:url" content="https://SITE_URL/">
+<meta property="og:image" content="https://SITE_URL/img/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="BOOK CLUB logo over a cozy bookshelf">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Book Club">
+<meta name="twitter:description" content="Our cozy little book club.">
+<meta name="twitter:image" content="https://SITE_URL/img/og-image.jpg">
+<!-- icons -->
+<link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="img/icon-192.png">
+<link rel="apple-touch-icon" href="img/apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&family=Bungee&family=Creepster&family=Fredericka+the+Great&family=Gochi+Hand&family=Henny+Penny&family=Homemade+Apple&family=IM+Fell+English+SC&family=Lobster&family=Mountains+of+Christmas:wght@700&family=Noto+Sans+Runic&family=Permanent+Marker&family=Rock+Salt&family=Special+Elite&family=Ultra&family=UnifrakturMaguntia&display=swap">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body class="tab-shelf">
+<main class="page">
+  <header class="panel hdr">
+    <div class="lights" aria-hidden="true"></div>
+    <h1 class="logo">BOOK CLUB</h1>
+    <div class="tagline">☕️ curl up · read · gossip about it ☕️</div>
+    <nav class="nav" id="nav"></nav>
+  </header>
+
+  <div class="ticker" aria-label="Stupid but true book facts"><div class="lbl">BOOK FACTS</div><div class="run"><span id="facts">Dusting off the facts...</span></div></div>
+
+  <div class="cols">
+    <section class="panel wall" aria-label="Bookshelf">
+      <div class="chalk"><h2>BOOK PICKS!</h2><span class="rnd" id="round-badge">Under 300 pages</span></div>
+      <div class="budget" id="budget"></div>
+      <div class="cabinet">
+        <div class="glass"><div class="items" id="shelf"></div></div>
+        <div class="base"><span class="assoc">Shhh... cozy reading zone</span><span class="lock" aria-hidden="true"></span></div>
+      </div>
+      <div class="bin-row">
+        <div class="bin" id="bin"><span class="lbl">BOOK DROP</span></div>
+      </div>
+    </section>
+
+    <aside class="im" aria-label="Chat room">
+      <div class="win">
+        <div class="tbar"><span class="ico">❦</span><span class="t">Book Club Chat Room</span></div>
+        <div class="menu" id="chat-menu"></div>
+        <div class="here glit" id="here"></div>
+        <div class="chatlog glit" id="chatlog" aria-live="polite"></div>
+        <div id="chat-send"></div>
+      </div>
+      <section class="panel pep" id="pep" aria-label="Daily Reading"></section>
+    </aside>
+  </div>
+
+  <footer class="foot">
+    <span class="star">❦</span>
+    <span class="badge">Best viewed in 1024x768</span>
+    <span class="badge">Made w/ Notepad</span>
+    <span class="badge">Book data: Open Library</span>
+    <span class="badge">Powered by tea ☕️</span>
+    <span class="star">❦</span>
+  </footer>
+</main>
+
+<nav class="mtabs" id="mtabs">
+  <button type="button" class="on" data-tab="shelf">📚 Shelf</button>
+  <button type="button" data-tab="chat">💬 Chat<b id="unread" hidden>0</b></button>
+</nav>
+
+<div id="layer"></div>
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
