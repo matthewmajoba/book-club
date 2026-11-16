@@ -205,7 +205,7 @@ function tierOf(n, total) {
 const myVotes = () => (S.me ? S.votes.filter((v) => v.member_id === S.me.id) : []);
 const myUsed = () => myVotes().reduce((a, v) => a + v.points, 0);
 const livePick = (memberId) => S.books.find((b) => b.member_id === memberId && (b.status === "active" || b.status === "pending"));
-const maxPages = () => Number(S.round?.max_pages || 300);
+const maxPages = () => Number(S.round?.max_pages || 150);
 
 // ---------- render: header ----------
 function renderNav() {
@@ -444,7 +444,7 @@ function openAdd() {
   if (!S.me) return openLogin();
   if (livePick(S.me.id)) return toast("You already have a book on the shelf. Return it first (late fee!).", true);
   const body = dialog("Put a book on the shelf", { wide: true });
-  const q = h("input", { type: "search", placeholder: "search books... (e.g. The Hobbit)", autocomplete: "off", maxLength: 80 });
+  const q = h("input", { type: "search", placeholder: "search books, novellas, short stories... (e.g. The Little Prince)", autocomplete: "off", maxLength: 80 });
   const results = h("div", { class: "results" });
   const detail = h("div");
   let timer = null, picked = null, seq = 0;
@@ -458,7 +458,7 @@ function openAdd() {
       if (my !== seq) return;
       results.replaceChildren(...(d.results.length ? d.results.map((r) => h("button", { type: "button", onclick: (e) => choose(r, e.currentTarget) },
         thumb(r), h("span", null, h("b", null, r.title), h("small", null, [r.author, r.year, r.pages ? `${r.pages} pages` : null].filter(Boolean).join(" · ")))))
-        : [h("span", null, "Couldn't find that one. Try the can't-find-it option below.")]));
+        : [h("span", null, "Couldn't find that one. Short stories often hide inside collections, so try the can't-find-it option below.")]));
     } catch (e) { results.replaceChildren(h("span", { class: "err" }, errMsg(e))); }
   };
   const choose = async (r, btn) => {
@@ -495,7 +495,7 @@ function openAdd() {
     try { await callFn({ action: "add_manual", token: S.token, title: manual.value, author: manualBy.value }); closeDialog(); await refreshShelf(); toast("Sent! It goes on the shelf once the pages get counted."); }
     catch (e) { toast(errMsg(e), true); manualBtn.disabled = false; }
   });
-  body.append(h("h3", null, `Rule: under ${maxPages()} pages`), q, results, detail,
+  body.append(h("h3", null, `Rule: a book, novella or short story under ${maxPages()} pages`), q, results, detail,
     h("details", null, h("summary", null, "Can't find it?"),
       h("div", { class: "manual" }, manual, manualBy, manualBtn),
       h("small", null, "The pages get counted by hand before it goes on the shelf.")));
@@ -638,7 +638,7 @@ async function openLoveNotes() {
 function openRules() {
   const body = dialog("The Rules");
   body.append(h("ol", { class: "rules" },
-    h("li", null, `One book each, under ${maxPages()} pages.`),
+    h("li", null, `One pick each: a book, novella or short story under ${maxPages()} pages.`),
     h("li", null, "You get 3 🔖 bookmarks to vote with. Put 2 in one book for a big vote."),
     h("li", null, "Returning your pick early = +1 late fee. Forever."),
     h("li", null, "The most-bookmarked book wins. Then we all read it.")));

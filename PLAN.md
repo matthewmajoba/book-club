@@ -21,8 +21,9 @@ their first Book Club sign-in (the palette and fonts are cozier than Game Club's
   Page counts are looked up on the server, never trusted from the browser.
 
 ## Rules
-- One book each on the shelf, **under 300 pages** (`rounds.max_pages`).
-  - ≤ 300: fine. 301–360: "ok but just this once cause I love you!" Over 360: blocked.
+- One pick each on the shelf: a book, novella or short story **under 150 pages** (`rounds.max_pages`).
+  - ≤ 150: fine. 151–180 (up to 20% over): "ok but just this once cause I love you!" Over 180: blocked.
+  - Short stories usually aren't in Open Library on their own: use "Can't find it?" and the admin types the page count.
   - Open Library has no page count (or the book isn't there): goes to "page check" until the
     admin types the page count.
 - 3 🔖 bookmarks per person to vote with; 2 in one book = a big vote.

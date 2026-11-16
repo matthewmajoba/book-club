@@ -35,15 +35,15 @@ async function lookup(key: string): Promise<Doc | null> {
 
 async function maxPages(): Promise<number> {
   const { data } = await db.from("rounds").select("max_pages").eq("status", "open").maybeSingle();
-  return Number(data?.max_pages ?? 300);
+  return Number(data?.max_pages ?? 150);
 }
 
-// same rule shape as Game Club: up to the max is fine, a little over is "just this once", way over is a no
+// same rule shape as Game Club: up to the max is fine, up to 20% over is "just this once", more is a no
 function verdict(p: number | null, max: number) {
   if (p == null) return { kind: "nodata", ok: true, msg: "Open Library doesn't know how long this one is, so it needs a quick page count check before it goes on the shelf." };
   if (p <= max) return { kind: "ok", ok: true, msg: `About ${p} pages. Perfect!` };
-  if (p <= max + 60) return { kind: "love", ok: true, msg: `About ${p} pages... ok but just this once cause I love you!` };
-  return { kind: "blocked", ok: false, msg: `This book is about ${p} pages. That's way over ${max}. Choose a different book!` };
+  if (p <= max + Math.round(max * 0.2)) return { kind: "love", ok: true, msg: `About ${p} pages... ok but just this once cause I love you!` };
+  return { kind: "blocked", ok: false, msg: `This one is about ${p} pages. That's way over ${max}. Try a shorter book, a novella or a short story!` };
 }
 
 const validKey = (k: unknown) => typeof k === "string" && /^\/works\/OL\d+W$/.test(k);
