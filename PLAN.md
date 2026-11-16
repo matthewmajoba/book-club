@@ -35,16 +35,28 @@ their first Book Club sign-in (the palette and fonts are cozier than Game Club's
   slip with a LATE stamp in the **Book Drop**.
 - Admin crowns the most-bookmarked book; it goes to **📚 Books We've Read** and the shelf clears.
 
-## Look
-- Vintage floral wallpaper background, red flannel plaid frames on every panel (all CSS, no photos).
-- Header: fairy lights, "BOOK CLUB" WordArt in Ultra (warm gold gradient, brown 3D shadow).
-- Ticker: BOOK FACTS typed on a strip of old paper (~140 stupid-but-true facts in `facts`).
-- Shelf: chalkboard sign, wooden bookcase with fairy lights, books faced out with page edges,
-  wooden shelf planks, handwritten shelf-talker cards taped on.
-- Bookmark tiers (share of all bookmarks): DUSTY 🕸️ · SKIMMING 😐 · INTRIGUED 🤔 · PAGE TURNER 😍 ·
-  CAN'T PUT IT DOWN 🤩.
-- Chat: warm 2000s messenger window on cocoa with fairy-light sparkles; a shop bell rings when
-  someone comes in.
+## Look (redesigned 2026-11-16 for pitching to bookstores)
+- Early-2000s website bones (one centered page on tiled wallpaper, framed boxes, a marquee,
+  plain-word nav, 80x15 footer badges) set like a literary magazine: Cormorant Garamond italic
+  headings, Georgia text, Verdana small-caps labels, Courier Prime for typed bits, "Nothing You
+  Could Do" for handwriting. No fake wood, plaid or fairy lights.
+- **The admin picks the look** (Admin → The look): club name, tagline, colors (8), wallpaper (10)
+  and frame (9). Clicking previews it only for the admin; Save writes `club_look` (one row,
+  `set_look` RPC) and everyone's page switches live. Patterns are SVGs drawn in `js/look.js` from
+  the chosen colors, so any combo works; frames are 36px border-images sliced at 12px. A small
+  script in `index.html` puts the last-seen look back before first paint.
+- Masthead: dateline (date · Vol. I · No. <round> · now reading), the club name huge in italic,
+  botanical sprigs either side, handwritten tagline, a double rule with a wax seal monogram
+  (initials of the club name), then the nav.
+- Ticker: BOOK FACTS typed on a strip of paper (~140 stupid-but-true facts in `facts`).
+- Shelf: books faced out on a shelf drawn with two ink rules; each vote is a bookmark ribbon
+  poking out of the top in the voter's color (big votes stand taller); bookseller shelf-talker
+  cards under each book; "Still choosing: ..." line for everyone without a pick.
+- Book Drop: a library date-due card with LATE stamps.
+- Bookmark tiers (share of all bookmarks): DUSTY · SKIMMING · INTRIGUED · PAGE TURNER ·
+  CAN'T PUT IT DOWN (shown as words on the shelf-talker).
+- Names: each member's font, in a darkened shade of their color with a highlighter swipe of it.
+- Chat: a 2000s messenger window in the club's colors; a shop bell rings when someone comes in.
 - **Daily Reading** (under the chat) and the **🔮 Crystal Ball of Encouragement and Love** archive
   work exactly like Game Club's (`js/pep.js` is a straight copy), with 30 book-flavored sayings.
   Love Notes start on 2026-11-15.
@@ -52,4 +64,4 @@ their first Book Club sign-in (the palette and fonts are cozier than Game Club's
 ## Re-deploy after changes
 - New migration file: `npx supabase db push`.
 - Function: `npx supabase functions deploy books --no-verify-jwt --use-api`.
-- Preview image + icons: `python scripts/make_share_images.py`.
+- Preview image + icons: `python scripts/make_share_images.py` (draws the default Claret look).

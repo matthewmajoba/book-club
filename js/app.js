@@ -4,6 +4,7 @@
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/+esm";
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from "./config.js";
 import { initPep } from "./pep.js";
+import { applyLook, lookOf, monogram, COLORWAYS, WALLPAPERS, FRAMES } from "./look.js";
 
 const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, { auth: { persistSession: false } });
 const FN_URL = `${SUPABASE_URL}/functions/v1/books`;
@@ -29,6 +30,7 @@ const TIERS = [
   { k: "CAN'T PUT IT DOWN", a: "🤩", b: "📚" },
 ];
 const TILTS = ["-2deg", "1.5deg", "-1deg", "2deg", "-1.5deg", "1deg"];
+const ROMAN = ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI", "XII"];
 
 // ---------- state ----------
 const store = {
@@ -39,7 +41,10 @@ const S = {
   token: store.get("bc_token"), me: null, members: [], round: null, books: [], votes: [], read: [],
   messages: [], facts: [], chatOn: store.get("bc_chat_on") !== "0", here: new Set(), hereReady: false,
   unread: 0, tab: "shelf", openBookId: null, logOpen: false,
+  look: lookOf(null), lookPreview: false,
 };
+// the look the admin picked (cached copy first, so the page doesn't flash the default)
+try { const c = JSON.parse(store.get("bc_look") || "null"); if (c?.name) S.look = lookOf({ ...S.look, club_name: c.name, tagline: c.tagline ?? S.look.tagline }); } catch { /* fine */ }
 
 // ---------- tiny DOM helper (text is always text) ----------
 function h(tag, attrs, ...kids) {
@@ -70,7 +75,6 @@ function nameEl(m, cls = "nm") {
   if (!m) { reloadMembersSoon(); return h("span", { class: cls }, "…"); }
   return h("span", { class: cls, vars: { "--mc": m.color || "#fff", "--mf": m.font ? `'${m.font}'` : "var(--ui)", "--fs": String(FONTS[m.font] || 0.85) } }, m.name);
 }
-const flip = (t) => h("span", { class: "flip" }, h("b", null, t.a), h("b", null, t.b));
 
 function toast(msg, bad = false) {
   const t = h("div", { class: "toast" + (bad ? " bad" : ""), role: "status" }, msg);
@@ -182,6 +186,11 @@ async function loadFacts() {
   const { data } = await sb.from("facts").select("body");
   S.facts = (data || []).map((f) => f.body);
 }
+async function loadLook() {
+  const { data } = await sb.from("club_look").select("*").maybeSingle();
+  if (data) S.look = lookOf(data);
+  if (!S.lookPreview) applyLook(S.look);
+}
 async function checkSession() {
   if (!S.token) return;
   try {
@@ -208,20 +217,36 @@ const livePick = (memberId) => S.books.find((b) => b.member_id === memberId && (
 const maxPages = () => Number(S.round?.max_pages || 150);
 
 // ---------- render: header ----------
+// the masthead: dateline, the club's name + tagline, its wax seal (all set by the admin's look)
+function renderMast(l = S.look) {
+  $("club-name").textContent = l.club_name;
+  $("tagline").textContent = l.tagline;
+  $("tagline").hidden = !l.tagline;
+  $("seal").textContent = monogram(l.club_name);
+  $("chat-title").textContent = `${l.club_name} Chat Room`;
+  $("colophon").textContent = `${l.club_name} · a small reading society · est. MMXXVI`;
+  document.title = l.club_name;
+  $("dateline").textContent = new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric" });
+  const no = S.round?.id || 1;
+  $("volline").textContent = `Vol. I · No. ${ROMAN[no] || no}`;
+  const live = S.books.filter((b) => b.status === "active" || b.status === "pending").length;
+  $("nowline").textContent = S.read[0] ? `Now reading: ${S.read[0].title}` : live ? `${live} on the shelf` : "the shelf is open";
+}
 function renderNav() {
+  renderMast();
   const nav = $("nav");
+  const link = (label, fn, cls = "") => h("button", { type: "button", class: "nl " + cls, onclick: fn }, label);
   const items = [
-    h("button", { type: "button", class: "btn blue", onclick: openLog }, "📜 Log"),
-    h("button", { type: "button", class: "btn", onclick: openRead }, "📚 Books We've Read"),
-    h("button", { type: "button", class: "btn pink", onclick: openLoveNotes }, "🔮 Crystal Ball of Encouragement and Love"),
-    h("button", { type: "button", class: "btn", onclick: openRules }, "Rules"),
+    link("The Log", openLog),
+    link("Books We've Read", openRead),
+    link("Crystal Ball of Encouragement & Love", openLoveNotes),
+    link("Rules", openRules),
   ];
-  if (S.me?.is_admin) items.push(h("button", { type: "button", class: "btn pink", onclick: openAdmin }, "⚙ Admin"));
-  items.push(S.me
-    ? h("button", { type: "button", class: "btn", onclick: signOut }, "Sign out (", S.me.name, ")")
-    : h("button", { type: "button", class: "btn on", onclick: openLogin }, "Sign in"));
+  if (S.me?.is_admin) items.push(link("Admin", openAdmin));
+  items.push(S.me ? link(`Sign out, ${S.me.name}`, signOut, "me") : link("Sign in", openLogin, "go"));
   nav.replaceChildren(...items);
-  $("round-badge").textContent = `Under ${maxPages()} pages`;
+  $("round-badge").textContent = `under ${maxPages()} pages`;
+  $("round-no").textContent = `The Shelf · No. ${ROMAN[S.round?.id] || S.round?.id || "I"}`;
 }
 
 function renderTicker() {
@@ -240,13 +265,14 @@ function renderTicker() {
 function renderBudget() {
   const b = $("budget");
   if (!S.me) {
-    b.replaceChildren(h("span", null, "You get 3 🔖 bookmarks to vote with once you sign in."),
+    b.replaceChildren(h("span", null, "Members get three bookmarks to vote with. Tap a book to see who picked it."),
       h("button", { type: "button", class: "btn", onclick: openLogin }, "Sign in"));
     return;
   }
   const used = myUsed(), left = Math.max(0, 3 - used);
   b.replaceChildren(
-    h("span", null, "Your bookmarks: ", h("span", { class: "tok" }, "🔖".repeat(left), h("s", null, "🔖".repeat(3 - left))), " ", h("b", null, `${left} left`)));
+    h("span", null, "Your bookmarks", h("span", { class: "tok", "aria-hidden": "true" }, [0, 1, 2].map((i) => h("i", { class: i < left ? "" : "used" }))), h("b", null, `${left} of 3 left`)),
+    h("span", null, left ? "Tap a book to tuck one in." : "All tucked in. Tap a book to take one back."));
 }
 
 // a cloth-bound "cover" for books without a picture
@@ -256,11 +282,17 @@ function coverImg(b) {
   img.addEventListener("error", () => img.replaceWith(plainCover(b)));
   return img;
 }
-function caseEl(b, { sticker = true, tier = 0, mine = 0 } = {}) {
+// bookmarks poking out of the top of the book: one per vote, in the voter's color
+function slipsEl(b) {
+  const vs = S.votes.filter((v) => v.book_id === b.id).slice(0, 9);
+  if (!vs.length) return null;
+  return h("span", { class: "slips", "aria-hidden": "true" }, vs.map((v, i) =>
+    h("i", { class: v.points === 2 ? "big" : "", vars: { "--mc": member(v.member_id)?.color || "#999", "--r": `${[-5, 3, -2, 6, -4, 2][i % 6]}deg` } })));
+}
+function caseEl(b, { slips = true } = {}) {
   const c = h("div", { class: "case" }, b.cover_url ? coverImg(b) : plainCover(b));
-  if (b.status === "pending") c.append(h("span", { class: "waiting" }, "Page check"));
-  else if (sticker) c.append(h("span", { class: `sticker t${tier}`, title: TIERS[tier].k }, flip(TIERS[tier])));
-  if (mine) c.append(h("span", { class: "mine" + (mine === 1 ? " one" : "") }, mine === 2 ? "your big vote ×2" : "your 🔖"));
+  if (b.status === "pending") c.append(h("span", { class: "waiting" }, "Awaiting page count"));
+  else if (slips) { const s = slipsEl(b); if (s) c.append(s); }
   return c;
 }
 
@@ -272,36 +304,61 @@ function renderShelf() {
   const cells = live.map((b, i) => {
     const m = member(b.member_id), n = per.get(b.id) || 0, ti = tierOf(n, total);
     const pct = total ? Math.round((n / total) * 100) : 0;
-    return h("button", { type: "button", class: "cell", vars: { "--mc": m?.color || "#ccc" }, onclick: () => openBook(b.id), "aria-label": `${b.title}${b.from_title ? `, a story from ${b.from_title}` : ""}, picked by ${m?.name}` },
-      caseEl(b, { tier: ti, mine: mine.get(b.id) || 0 }),
+    const myPts = mine.get(b.id) || 0;
+    return h("button", { type: "button", class: "cell", onclick: () => openBook(b.id), "aria-label": `${b.title}${b.from_title ? `, a story from ${b.from_title}` : ""}, picked by ${m?.name}, ${n} bookmarks` },
+      caseEl(b),
       h("div", { class: "edge" }),
       h("div", { class: "talker", vars: { "--r": TILTS[i % TILTS.length] } },
-        h("div", { class: "hd" }, "★ CLUB PICK ★"),
-        h("span", { class: "who" }, m?.name || "?"),
+        h("span", { class: "hd" }, `No. ${String(i + 1).padStart(2, "0")}`),
+        h("span", { class: "who" }, nameEl(m)),
         h("span", { class: "say" }, b.title),
         b.from_title ? h("span", { class: "from" }, "from ", b.from_title) : null,
-        h("div", { class: "bc" }, h("span", null, b.pages ? `${b.pages} PGS` : "? PGS"), h("span", null, b.status === "pending" ? "WAITING" : `🔖${n} · ${pct}%`))));
+        h("div", { class: "bc" }, h("span", null, b.pages ? `${b.pages} pp.` : "? pp."),
+          b.status === "pending" ? h("span", null, "waiting") : h("span", null, myPts ? h("span", { class: "you" }, `you ×${myPts} · `) : null, h("b", null, TIERS[ti].k), ` · ${pct}%`))));
   });
+  // my empty spot sits on the shelf; everyone else still choosing gets one line under it
   const open = S.members.filter((m) => !livePick(m.id));
-  open.sort((a, b) => (S.me && a.id === S.me.id ? -1 : S.me && b.id === S.me.id ? 1 : 0));
-  for (const m of open) {
-    const isMe = S.me && m.id === S.me.id;
-    cells.push(h(isMe ? "button" : "div", { type: isMe ? "button" : null, class: "cell" + (isMe ? " you" : " open-slot"), onclick: isMe ? openAdd : null },
-      h("div", { class: "case blank" }, isMe ? `+ ${m.name}, shelve yours!` : `${m.name}'s spot`),
-      h("div", { class: "edge" })));
-  }
+  if (S.me && !livePick(S.me.id)) cells.push(h("button", { type: "button", class: "cell you", onclick: openAdd },
+    h("div", { class: "case blank" }, `+ shelve yours, ${S.me.name}`), h("div", { class: "edge" })));
+  if (!cells.length) cells.push(h("div", { class: "cell open-slot" }, h("div", { class: "case blank" }, "the shelf is bare"), h("div", { class: "edge" })));
   $("shelf").replaceChildren(...cells);
+  fillShelfRow();
+  const waiting = open.filter((m) => !S.me || m.id !== S.me.id);
+  $("waitlist").replaceChildren(...(waiting.length ? [h("span", { class: "kicker" }, "Still choosing"),
+    h("span", { class: "names" }, waiting.flatMap((m, i) => [i ? (i === waiting.length - 1 ? " & " : ", ") : null, nameEl(m)]))] : []));
+  $("waitlist").hidden = !waiting.length;
 
   // book drop: only this shelf's early returns (it empties when a winner is crowned),
   // newest first, capped so it never takes over the page; the rest live in the Log
   const DROP_MAX = 6;
   const out = S.books.filter((b) => b.status === "withdrawn").reverse();
   const extra = out.length - DROP_MAX;
-  $("bin").replaceChildren(h("span", { class: "lbl" }, "BOOK DROP"),
-    ...(out.length ? out.slice(0, DROP_MAX).map((b, i) => h("div", { class: "scrap", vars: { "--r": i % 2 ? "4deg" : "-5deg" } }, `${member(b.member_id)?.name}: ${b.title}`))
-      : [h("span", { class: "none" }, "nobody has returned theirs early... yet 👀")]),
+  $("bin").replaceChildren(
+    h("div", { class: "hd" }, h("b", null, "The Book Drop"), h("small", null, "returned early · one late fee each")),
+    ...(out.length ? [
+      h("div", { class: "cols3 colh" }, h("span", null, "Date"), h("span", null, "Borrower"), h("span", null, "Title"), h("span", null, "")),
+      ...out.slice(0, DROP_MAX).map((b) => h("div", { class: "cols3 row3" },
+        h("span", null, fmtDay(b.ended_at || b.created_at).toUpperCase()), h("span", null, nameEl(member(b.member_id))),
+        h("span", { class: "t", title: b.title }, b.title), h("span", { class: "late" }, "LATE"))),
+    ] : [h("div", { class: "none" }, "Nobody has returned theirs early... yet.")]),
     ...(extra > 0 ? [h("button", { type: "button", class: "more", onclick: openLog }, `+${extra} more in the Log`)] : []));
 }
+
+// invisible spots at the end of the last row so the shelf runs the full width
+function fillShelfRow() {
+  const grid = $("shelf");
+  grid.querySelectorAll(".filler").forEach((f) => f.remove());
+  const cols = getComputedStyle(grid).gridTemplateColumns.split(" ").filter(Boolean).length || 1;
+  const n = grid.children.length;
+  for (let i = 0; i < (cols - (n % cols)) % cols; i++) {
+    grid.append(h("div", { class: "cell filler", "aria-hidden": "true" }, h("div", { class: "case blank" }), h("div", { class: "edge" })));
+  }
+}
+let shelfCols = 0;
+new ResizeObserver(() => {
+  const cols = getComputedStyle($("shelf")).gridTemplateColumns.split(" ").length;
+  if (cols !== shelfCols) { shelfCols = cols; fillShelfRow(); }
+}).observe($("shelf"));
 
 // ---------- render: chat ----------
 function renderChatMenu() {
@@ -372,6 +429,8 @@ function dialog(title, { wide = false } = {}) {
 function closeDialog() {
   $("layer").replaceChildren();
   S.openBookId = null; S.logOpen = false;
+  // closing the admin dialog without saving puts the club's real look back
+  if (S.lookPreview) { S.lookPreview = false; applyLook(S.look); renderMast(); }
 }
 document.addEventListener("keydown", (e) => { if (e.key === "Escape" && $("layer").firstChild) closeDialog(); });
 
@@ -544,19 +603,19 @@ async function refreshBookDialog() {
   const mineNow = myVotes().find((v) => v.book_id === b.id)?.points || 0;
   const usedElsewhere = myUsed() - mineNow;
 
-  const top = h("div", { class: "book-top" }, caseEl(b, { sticker: b.status === "active", tier: ti }),
+  const top = h("div", { class: "book-top" }, caseEl(b, { slips: b.status === "active" }),
     h("div", { class: "facts" },
       b.from_title ? h("div", null, h("b", null, "A story from: "), h("i", null, b.from_title)) : null,
       b.author ? h("div", null, h("b", null, "By: "), b.author) : null,
       h("div", null, "Picked by ", nameEl(picker)),
       h("div", null, h("b", null, "Length: "), b.pages ? `about ${b.pages} pages${b.pages_source === "admin" ? " (counted by hand)" : ""}` : "unknown (needs a page check)"),
-      b.status === "active" ? h("div", null, h("b", null, "Bookmarks: "), `${n} 🔖 · ${pct}% of all the bookmarks · `, h("span", { class: `t${ti}` }, flip(TIERS[ti])), " ", TIERS[ti].k) : null,
+      b.status === "active" ? h("div", null, h("b", null, "Bookmarks: "), `${n} · ${pct}% of all of them · `, h("span", { class: "tier" }, TIERS[ti].a, " ", TIERS[ti].k.toLowerCase())) : null,
       b.status === "won" ? h("div", { class: "ok" }, "📚 WE READ THIS ONE") : null,
       b.ol_key ? h("a", { href: `https://openlibrary.org${b.ol_key}`, target: "_blank", rel: "noopener" }, "See it on Open Library ↗") : null));
 
   const parts = [top];
   const voters = S.votes.filter((v) => v.book_id === b.id);
-  if (voters.length) parts.push(h("div", { class: "voters" }, h("b", null, "Who's into it:"), voters.map((v) => h("span", null, nameEl(member(v.member_id)), " ", "🔖".repeat(v.points)))));
+  if (voters.length) parts.push(h("div", { class: "voters" }, h("b", null, "Who's into it:"), voters.map((v) => h("span", null, nameEl(member(v.member_id)), " ", h("span", { class: "pts" }, v.points === 2 ? "×2" : "")))));
 
   if (S.me && b.status === "active") {
     // tap to put a bookmark in, tap the lit one again to take it back out
@@ -667,7 +726,7 @@ function openRules() {
     h("li", null, "The most-bookmarked book wins. Then we all read it.")));
 }
 function openAdmin() {
-  const body = dialog("Admin");
+  const body = dialog("Admin", { wide: true });
   const box = h("div");
   const pending = S.books.filter((b) => b.status === "pending");
   const { per } = marks();
@@ -685,12 +744,66 @@ function openAdmin() {
     pending.length ? h("div", null, pending.map((b) => h("div", { class: "row" }, h("span", null, `${b.title} (${member(b.member_id)?.name})`),
       h("button", { type: "button", class: "btn", onclick: () => openBook(b.id) }, "Check it")))) : h("span", null, "Nothing waiting."),
     h("h3", null, "Pick the winner"), box,
-    h("small", null, "Need a new code for a member? Ask Claude to run scripts/set_codes.py with their name."));
+    h("small", null, "Need a new code for a member? Ask Claude to run scripts/set_codes.py with their name."),
+    ...lookPicker());
+}
+
+// the club's look: name, tagline, colors, wallpaper, frame. Clicking previews it on the whole page;
+// nothing changes for anyone else until Save.
+function lookPicker() {
+  let draft = { ...S.look };
+  const name = h("input", { type: "text", maxLength: 40, value: draft.club_name, autocomplete: "off" });
+  const tag = h("input", { type: "text", maxLength: 80, value: draft.tagline, autocomplete: "off" });
+  const cw = h("div", { class: "looks" }), wp = h("div", { class: "looks" }), fr = h("div", { class: "looks" });
+  const opt = (id, cur, label, thumb, set) => h("button", { type: "button", class: id === cur ? "sel" : "", "aria-pressed": String(id === cur), onclick: () => { set(id); preview(); } }, thumb, label);
+  const draw = () => {
+    const c = COLORWAYS[draft.colorway];
+    cw.replaceChildren(...Object.entries(COLORWAYS).map(([id, k]) => opt(id, draft.colorway, k.name,
+      h("span", { class: "th cw", vars: { "--g": k.ground } }, [k.motif, k.accent, k.soft].map((col) => h("i", { vars: { background: col } }))), (v) => { draft.colorway = v; })));
+    wp.replaceChildren(...Object.entries(WALLPAPERS).map(([id, w]) => opt(id, draft.wallpaper, w.name,
+      h("span", { class: "th", vars: { background: `${w.draw(c)}, ${c.ground}` } }), (v) => { draft.wallpaper = v; })));
+    fr.replaceChildren(...Object.entries(FRAMES).map(([id, f]) => opt(id, draft.frame, f.name,
+      h("span", { class: "th fr", vars: { "--f": f.draw(c), "--accent": c.accent, "--paper": c.paper, background: `${WALLPAPERS[draft.wallpaper].draw(c)}, ${c.ground}` } }), (v) => { draft.frame = v; })));
+  };
+  const preview = () => {
+    draft.club_name = name.value.trim() || S.look.club_name;
+    draft.tagline = tag.value.trim();
+    S.lookPreview = true; applyLook(draft, { remember: false }); renderMast(draft); draw();
+  };
+  name.addEventListener("input", preview);
+  tag.addEventListener("input", preview);
+  const fill = (l) => { draft = { ...l }; name.value = l.club_name; tag.value = l.tagline; preview(); };
+  const save = h("button", { type: "button", class: "btn big", onclick: async () => {
+    if (!name.value.trim()) return toast("The club needs a name.", true);
+    save.disabled = true;
+    try {
+      const row = await rpc("set_look", { p_token: S.token, p_name: name.value, p_tagline: tag.value,
+        p_colorway: draft.colorway, p_wallpaper: draft.wallpaper, p_frame: draft.frame });
+      S.look = lookOf(row); S.lookPreview = false; applyLook(S.look); renderMast();
+      toast("Saved. Everyone sees the new look now.");
+    } catch (e) { toast(errMsg(e), true); }
+    save.disabled = false;
+  } }, "Save the look");
+  draw();
+  return [
+    h("h3", null, "The look"),
+    h("small", { class: "tip" }, "Click around to try things on. Only you see it until you press Save."),
+    h("div", { class: "look-text" },
+      h("label", null, "Club name", name),
+      h("label", null, "Tagline", tag)),
+    h("b", { class: "kicker" }, "Colors"), cw,
+    h("b", { class: "kicker" }, "Wallpaper"), wp,
+    h("b", { class: "kicker" }, "Frame"), fr,
+    h("div", { class: "savebar" }, save,
+      h("button", { type: "button", class: "btn", onclick: () => fill(S.look) }, "Undo my changes"),
+      h("button", { type: "button", class: "btn", onclick: () => fill({ ...lookOf(null), club_name: name.value.trim() || S.look.club_name, tagline: tag.value }) }, "Original colors + patterns")),
+  ];
 }
 
 // ---------- fun stuff ----------
 function celebrate(word = "NEW BOOK!") {
-  const colors = ["#ff8fb8", "#ffd166", "#7bd88f", "#ff9f43", "#b99cff", "#f4e1b0"];
+  const c = COLORWAYS[S.look.colorway];
+  const colors = [c.accent, c.motif, c.soft, "#e7c97c", c.paper, "#f2b8c6"];
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (!reduce) for (let i = 0; i < 90; i++) {
     const c = h("div", { class: "confetti" + (i % 3 ? "" : " leaf"), vars: {
@@ -771,6 +884,11 @@ function setupRealtime() {
       if (S.openBookId === p.new.book_id) { const box = $("layer").querySelector(".notes"); if (box) loadNotes(p.new.book_id, box); }
     })
     .on("postgres_changes", { event: "INSERT", schema: "public", table: "log" }, () => { if (S.logOpen) openLog(); })
+    .on("postgres_changes", { event: "*", schema: "public", table: "club_look" }, (p) => {
+      if (!p.new?.id) return;
+      S.look = lookOf(p.new);
+      if (!S.lookPreview) { applyLook(S.look); renderMast(); }
+    })
     .subscribe();
 }
 
@@ -786,8 +904,10 @@ $("mtabs").addEventListener("click", (e) => {
 
 // ---------- go ----------
 (async function start() {
+  if (!document.documentElement.style.getPropertyValue("--frame")) applyLook(S.look, { remember: false });
+  renderMast();
   try {
-    await Promise.all([loadMembers(), loadShelf(), loadMessages(), loadFacts(), checkSession()]);
+    await Promise.all([loadMembers(), loadShelf(), loadMessages(), loadFacts(), loadLook(), checkSession()]);
   } catch (e) { toast("Couldn't reach Book Club's database. Try refreshing.", true); }
   if (S.me) S.me = member(S.me.id) || S.me;
   renderTicker(); renderAll();
