@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1. The Doily Parlor · Book Club look</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pinyon+Script&family=Cormorant+SC:wght@500;700&family=Cormorant+Garamond:ital,wght@1,500&family=Lobster&family=UnifrakturMaguntia&family=Homemade+Apple&family=Henny+Penny&family=Courier+Prime:wght@400;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap">
+<link rel="stylesheet" href="base.css">
+<style>
+:root{--bg:#8f0f12;--tile:url(img/doily-bg.jpg);--tile-size:170px;--panel:#fff8f1;--ink:#3b1418;--muted:#8d5a5a;--accent:#9d1424;--title:"Pinyon Script",cursive;--display:"Cormorant Garamond",serif}
+.mast{padding:10px 0 4px}
+.dly{position:absolute;left:50%;top:50%;width:min(560px,96vw);transform:translate(-50%,-50%) rotate(8deg);filter:drop-shadow(0 6px 10px rgba(0,0,0,.45));pointer-events:none}
+.mast-in{background:radial-gradient(ellipse at 50% 40%,#fffdf8,#f7e9dc);border-radius:50%;padding:46px 70px 44px;margin:46px 0;
+  box-shadow:0 0 0 4px #e7c66a,0 0 0 6px #8a6420,0 0 0 9px #f3dc9a,0 0 0 11px #8a6420,0 14px 30px rgba(0,0,0,.55),inset 0 0 30px rgba(140,90,60,.18)}
+.hello{font:500 14px "Cormorant SC",serif;letter-spacing:.35em;color:#8a6420}
+.tag{font:italic 500 22px "Cormorant Garamond",serif}
+.gb{font:700 15px/1 "Cormorant SC",serif;letter-spacing:.06em;color:#5a1620;padding:11px 22px 12px;border-radius:999px;
+  background:radial-gradient(ellipse at 50% 30%,#fff4ef,#f6cdbf 70%,#e9aa98);
+  box-shadow:inset 0 0 0 2px #fff7e6,inset 0 -3px 6px rgba(140,60,50,.25),0 0 0 3px #d9b257,0 0 0 4px #7d5a18,0 4px 0 4px #6b4a12,0 9px 14px 2px rgba(0,0,0,.45);text-shadow:0 1px 0 #fff}
+.gb:hover{background:radial-gradient(ellipse at 50% 30%,#fff,#ffd9cc 70%,#f2b3a2)}
+.gb:active{transform:translateY(3px);box-shadow:inset 0 0 0 2px #fff7e6,0 0 0 3px #d9b257,0 0 0 4px #7d5a18,0 1px 0 4px #6b4a12}
+.gb.go{background:radial-gradient(ellipse at 50% 30%,#d33c4c,#9d1424 75%);color:#fff4ee;text-shadow:0 1px 1px #4a0008}
+.gb.small{font-size:13px;padding:8px 16px}
+.ticker{background:#fde5ea;border:2px solid #d9b257;border-radius:999px;box-shadow:0 0 0 4px #fff7f0,0 6px 14px rgba(0,0,0,.45)}
+.ticker b{font:400 24px "Pinyon Script";color:#fff;background:#9d1424;border-radius:999px 0 0 999px;padding:0 22px}
+.ticker .run{font:italic 500 18px "Cormorant Garamond",serif;color:#5a1620}.ticker em{color:#9d1424}
+.box{border-radius:18px;box-shadow:0 0 0 4px #f7d6dd,0 0 0 6px #d9b257,0 0 0 7px #7d5a18,0 14px 30px rgba(0,0,0,.55)}
+.box::before{content:"";position:absolute;inset:7px;border:1.5px dashed #e3a6b2;border-radius:13px;pointer-events:none}
+.limit{font:500 17px "Cormorant SC",serif;border:1.5px solid #d9b257;border-radius:999px;background:#fff1ea}
+.cover::before{content:"";position:absolute;left:50%;top:50%;width:150%;aspect-ratio:1;transform:translate(-50%,-30%) rotate(-12deg);background:url(img/doily.png) center/contain no-repeat;z-index:-2;filter:drop-shadow(0 3px 3px rgba(0,0,0,.25))}
+.card{position:relative;z-index:1}
+.card{background:#fff;border-radius:10px;box-shadow:0 0 0 1px #e9c3c9,0 3px 6px rgba(0,0,0,.12)}
+.pending{background:#9d1424;color:#fff}
+.chat .tb{background:linear-gradient(#c8324a,#9d1424);color:#fff;font:700 15px "Cormorant SC",serif;letter-spacing:.06em;border-radius:18px 18px 0 0}
+.tbi{width:20px;height:20px;border-radius:50%;background:#fff;color:#9d1424;display:grid;place-items:center}
+.chat .here{background:#fdeef0;border-bottom:1px solid #f0c8cf}
+.daily{background:radial-gradient(circle at 50% 0,#4a1028,#200814);color:#ffeef2}
+.daily::before{border-color:#d9b257}
+.daily h3{font:400 32px "Pinyon Script";color:#f3dc9a}
+.count span{background:#200814;color:#f3dc9a;border:2px solid #d9b257;border-radius:6px}
+.foot{font:italic 500 18px "Cormorant Garamond",serif}.foot .colo{background:#fff8f1;padding:4px 20px;border-radius:999px;box-shadow:0 0 0 3px #d9b257}
+</style></head>
+<body class="t1">
+<a class="back" href="index.html">&larr; all 10 looks</a>
+<main class="page">
+  <header class="mast"><img class="dly" src="img/doily.png" alt="">
+    <div class="mast-in"><p class="hello">Grandma's</p><h1 class="name">Book Club</h1><p class="tag">&#9733; like game club but for books &#9733;</p></div>
+  </header>
+  <nav class="nav">
+    <button class="gb">The Log</button><button class="gb">Books We've Read</button><button class="gb">Crystal Ball of Encouragement &amp; Love</button>
+    <button class="gb">Rules</button><button class="gb">Admin</button><button class="gb go">Sign out, Matt</button>
+  </nav>
+  <div class="ticker"><b>Book Facts</b><div class="run"><span>Agatha Christie learned about poisons working in a hospital pharmacy.<em>❦</em>The Little Prince has been translated into over 500 languages.<em>❦</em>Dr. Seuss wrote Green Eggs and Ham on a bet that he couldn't use only 50 words.<em>❦</em>Libraries in the 1800s often charged a membership fee.</span></div></div>
+  <div class="cols">
+    <section class="box shelfbox">
+      <div class="sec"><h2>Book Picks</h2><span class="limit">under 150 pages</span></div>
+      <div class="budget">Your bookmarks <span class="tok"><i></i><i></i><i class="u"></i></span> <b>2 of 3 left</b><button class="gb small">+ Put a book on the shelf</button></div>
+      <div class="shelf"><div class="book"><div class="cover"><span class="ribbons"><i style="--c:#8fa8ff" class=big></i><i style="--c:#7bd88f"></i></span><img src="https://covers.openlibrary.org/b/id/4942829-L.jpg" alt="Cover of Best New Horror" ></div>
+      <div class="card"><span class="by">picked by</span><span class="nm" style="--mc:#ff9f43;--mf:'UnifrakturMaguntia';--fs:1.05">Matt</span><span class="ti">Best New Horror</span><small>from 20th Century Ghosts</small><span class="meta">28 pp · <b>page turner</b></span></div></div><div class="book"><div class="cover"><span class="ribbons"><i style="--c:#ff9f43"></i></span><img src="https://covers.openlibrary.org/b/id/2547013-L.jpg" alt="Cover of The Stinky Cheese Man" ></div>
+      <div class="card"><span class="by">picked by</span><span class="nm" style="--mc:#b99cff;--mf:'Homemade Apple';--fs:0.8">Sarah</span><span class="ti">The Stinky Cheese Man</span><span class="meta">52 pp · <b>intrigued</b></span></div></div><div class="book"><div class="cover"><span class="ribbons"><i style="--c:#ff9f43"></i><i style="--c:#b99cff" class=big></i><i style="--c:#ff6b6b"></i></span><img src="https://covers.openlibrary.org/b/isbn/9780156012195-L.jpg" alt="Cover of The Little Prince" ></div>
+      <div class="card"><span class="by">picked by</span><span class="nm" style="--mc:#7bd88f;--mf:'Lobster';--fs:1">Kalon</span><span class="ti">The Little Prince</span><span class="meta">96 pp · <b>can't put it down</b></span></div></div><div class="book"><div class="cover"><img src="https://covers.openlibrary.org/b/isbn/9780140177398-L.jpg" alt="Cover of Of Mice and Men" ><span class="pending">awaiting page count</span></div>
+      <div class="card"><span class="by">picked by</span><span class="nm" style="--mc:#ff6b6b;--mf:'Henny Penny';--fs:0.92">Hannah</span><span class="ti">Of Mice and Men</span><span class="meta">? pp</span></div></div></div>
+      <p class="still"><span>Still choosing</span> <span class="nm" style="--mc:#4fd1c5;--mf:'Lobster';--fs:1">Giselle</span> &amp; <span class="nm" style="--mc:#ffd166;--mf:'Henny Penny';--fs:0.92">Junior</span></p>
+      <div class="drop"><div class="hd"><b>The Book Drop</b><small>returned early · one late fee each</small></div>
+        <div class="row"><span>NOV 12</span><span><span class="nm" style="--mc:#6ec6ff;--mf:'Lobster';--fs:1">Anthony</span></span><span>Wuthering Heights</span><span class="late">LATE</span></div></div>
+    </section>
+    <aside class="side">
+      <div class="box chat">
+        <div class="tb"><span class="tbi">&#10086;</span><span>Book Club Chat Room</span></div>
+        <div class="here"><span class="lbl">here now (3/10):</span> <span class="nm" style="--mc:#ff9f43;--mf:'UnifrakturMaguntia';--fs:1.05">Matt</span> <span class="nm" style="--mc:#7bd88f;--mf:'Lobster';--fs:1">Kalon</span> <span class="nm" style="--mc:#b99cff;--mf:'Homemade Apple';--fs:0.8">Sarah</span></div>
+        <div class="log">
+          <p><span class="ts">(8:10 AM)</span><span class="nm" style="--mc:#7bd88f;--mf:'Lobster';--fs:1">Kalon</span>: under 150 pages? what are we reading, chapter books? lol</p>
+          <p class="sys"><span class="ts">(8:19 AM)</span>Sarah put The Stinky Cheese Man on the shelf!</p>
+          <p><span class="ts">(8:21 AM)</span><span class="nm" style="--mc:#b99cff;--mf:'Homemade Apple';--fs:0.8">Sarah</span>: Kids books</p>
+          <p><span class="ts">(8:24 AM)</span><span class="nm" style="--mc:#ff9f43;--mf:'UnifrakturMaguntia';--fs:1.05">Matt</span>: grandma would be so proud of us</p>
+        </div>
+        <div class="send"><input type="text" placeholder="type a message..." aria-label="Message"><button class="gb small">Send</button></div>
+      </div>
+      <div class="box daily">
+        <h3>Daily Reading</h3>
+        <q>You have the energy of a brand-new library card.</q>
+        <div class="orbrow"><span class="orb" aria-hidden="true"></span><span class="count"><span>000168</span><small>likes</small></span></div>
+      </div>
+    </aside>
+  </div>
+  <footer class="foot"><p class="colo">Book Club · a small reading society · est. 2026</p>
+    <div class="badges"><span class="badge"><b>BEST VIEWED</b><i>1024x768</i></span><span class="badge"><b>MADE W/</b><i>LOVE</i></span><span class="badge"><b>BOOKS BY</b><i>OPEN LIBRARY</i></span><span class="badge"><b>ASK</b><i>GRANDMA</i></span></div>
+  </footer>
+</main>
+</body></html>

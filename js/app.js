@@ -309,7 +309,7 @@ function renderShelf() {
       caseEl(b),
       h("div", { class: "edge" }),
       h("div", { class: "talker", vars: { "--r": TILTS[i % TILTS.length] } },
-        h("span", { class: "hd" }, `No. ${String(i + 1).padStart(2, "0")}`),
+        h("span", { class: "hd" }, "picked by"),
         h("span", { class: "who" }, nameEl(m)),
         h("span", { class: "say" }, b.title),
         b.from_title ? h("span", { class: "from" }, "from ", b.from_title) : null,
@@ -323,7 +323,8 @@ function renderShelf() {
   if (!cells.length) cells.push(h("div", { class: "cell open-slot" }, h("div", { class: "case blank" }, "the shelf is bare"), h("div", { class: "edge" })));
   $("shelf").replaceChildren(...cells);
   fillShelfRow();
-  const waiting = open.filter((m) => !S.me || m.id !== S.me.id);
+  // only people who have signed in at least once (and set up their name) get listed
+  const waiting = open.filter((m) => m.setup_done && (!S.me || m.id !== S.me.id));
   $("waitlist").replaceChildren(...(waiting.length ? [h("span", { class: "kicker" }, "Still choosing"),
     h("span", { class: "names" }, waiting.flatMap((m, i) => [i ? (i === waiting.length - 1 ? " & " : ", ") : null, nameEl(m)]))] : []));
   $("waitlist").hidden = !waiting.length;

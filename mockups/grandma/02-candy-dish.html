@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2. Grandma's Candy Dish · Book Club look</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Leckerli+One&family=Fredoka:wght@500;700&family=Lobster&family=UnifrakturMaguntia&family=Homemade+Apple&family=Henny+Penny&family=Courier+Prime:wght@400;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap">
+<link rel="stylesheet" href="base.css">
+<style>
+:root{--bg:#ffe3ea;--tile:url(img/candy-bg.jpg);--tile-size:340px;--panel:#fffdfd;--ink:#4a1420;--muted:#a05a6a;--accent:#d3203f;--title:"Leckerli One",cursive;--display:"Fredoka",sans-serif;--body:"Fredoka",sans-serif}
+.mast{padding:34px 20px 30px;background:#fff;border-radius:44px;box-shadow:0 0 0 12px #fff,0 0 0 12px #fff,0 18px 34px rgba(160,30,60,.35);
+  border:14px solid transparent;background:linear-gradient(#fffafb,#fff0f4) padding-box,repeating-linear-gradient(45deg,#e01f3d 0 14px,#fff 14px 28px) border-box}
+.cnd{position:absolute;width:min(230px,26vw);top:50%;filter:drop-shadow(0 8px 8px rgba(0,0,0,.25))}
+.cnd.l{left:-36px;transform:translateY(-50%) rotate(-24deg)}.cnd.r{right:-36px;transform:translateY(-50%) rotate(160deg) scaleY(-1)}
+.name{color:#e01f3d;text-shadow:3px 3px 0 #fff,6px 6px 0 #1f8a4c,7px 7px 0 #0d5a2c;font-size:clamp(56px,11vw,124px)}
+.hello{font:700 13px "Fredoka";letter-spacing:.25em;color:#1f8a4c}
+.tag{font:500 19px "Fredoka";background:#1f8a4c;color:#fff;padding:5px 18px;border-radius:999px;margin-top:12px}
+.gb{position:relative;margin:0 22px;font:700 14px/1 "Fredoka";color:#fff;padding:12px 18px;border-radius:22px;text-shadow:0 1px 1px #6a0010;
+  background:radial-gradient(circle at 20% 30%,#ffe36b 0 1.4px,transparent 2px) 0 0/14px 12px,radial-gradient(circle at 70% 75%,#ffe36b 0 1.4px,transparent 2px) 0 0/14px 12px,radial-gradient(ellipse at 40% 25%,#ff8a9a,#e01f3d 55%,#9a0a22);
+  box-shadow:inset 0 3px 3px rgba(255,255,255,.55),inset 0 -4px 6px rgba(80,0,10,.4),0 6px 10px rgba(120,0,30,.35)}
+.gb::before,.gb::after{content:"";position:absolute;top:50%;width:26px;height:34px;margin-top:-17px;background:linear-gradient(135deg,#0e6a35,#3fd47e 35%,#0b5a2b 55%,#55e292 75%,#0e6a35);z-index:-1}
+.gb::before{left:-22px;clip-path:polygon(100% 30%,0 0,18% 30%,0 50%,18% 70%,0 100%,100% 70%)}
+.gb::after{right:-22px;clip-path:polygon(0 30%,100% 0,82% 30%,100% 50%,82% 70%,100% 100%,0 70%)}
+.gb:hover{filter:brightness(1.08)}.gb:active{transform:translateY(2px) scale(.98)}
+.gb.go{background:radial-gradient(ellipse at 40% 25%,#7cf0aa,#1f8a4c 55%,#0b4a24)}
+.gb.go::before,.gb.go::after{background:linear-gradient(135deg,#a3001c,#ff6a80 35%,#a3001c 55%,#ff8a9a 75%,#a3001c)}
+.gb.small{font-size:12.5px;padding:9px 14px}
+.ticker{background:#fff;border-radius:999px;border:4px solid #1f8a4c;box-shadow:0 6px 0 #0d5a2c}
+.ticker b{background:#1f8a4c;color:#fff;font:400 20px "Leckerli One"}
+.ticker .run{font:500 16px "Fredoka";color:#4a1420}.ticker em{color:#e01f3d}
+.box{border-radius:28px;border:12px solid transparent;background:linear-gradient(#fffdfd,#fff6f8) padding-box,repeating-linear-gradient(45deg,#e01f3d 0 12px,#fff 12px 24px) border-box;box-shadow:0 14px 28px rgba(160,30,60,.3)}
+.limit{background:#ffe3ea;border-radius:999px;font:700 14px "Fredoka";color:#e01f3d}
+.card{background:#fff;border-radius:14px;border:3px solid #ffd0db;border-top:10px solid transparent;background:linear-gradient(#fff,#fff) padding-box,repeating-linear-gradient(90deg,#ffd0db 0 8px,#fff 8px 16px) border-box}
+.cover img{border-radius:6px}
+.pending{background:#1f8a4c;color:#fff;border-radius:6px}
+.chat{padding:0}.chat .tb{background:repeating-linear-gradient(90deg,#ffd0db 0 14px,#fff 14px 28px);color:#e01f3d;font:400 20px "Leckerli One"}
+.tbi{color:#1f8a4c}.chat .here{border-bottom:2px dotted #ffc0cf}
+.daily{background:radial-gradient(circle at 50% 10%,#ffe3ea,#ffc9d6) padding-box,repeating-linear-gradient(45deg,#e01f3d 0 12px,#fff 12px 24px) border-box}
+.daily h3{font:400 30px "Leckerli One";color:#e01f3d}
+.count span{background:#fff;border:3px solid #e01f3d;border-radius:12px;color:#e01f3d}
+.foot{font:500 16px "Fredoka";color:#4a1420}.foot .colo{background:#fff;padding:4px 16px;border-radius:999px}
+</style></head>
+<body class="t2">
+<a class="back" href="index.html">&larr; all 10 looks</a>
+<main class="page">
+  <header class="mast"><img class="cnd l" src="img/candy.png" alt=""><img class="cnd r" src="img/candy.png" alt="">
+    <div class="mast-in"><p class="hello">Grab a candy, sweetie</p><h1 class="name">Book Club</h1><p class="tag">&#9733; like game club but for books &#9733;</p></div>
+  </header>
+  <nav class="nav">
+    <button class="gb">The Log</button><button class="gb">Books We've Read</button><button class="gb">Crystal Ball of Encouragement &amp; Love</button>
+    <button class="gb">Rules</button><button class="gb">Admin</button><button class="gb go">Sign out, Matt</button>
+  </nav>
+  <div class="ticker"><b>Book Facts</b><div class="run"><span>Agatha Christie learned about poisons working in a hospital pharmacy.<em>❦</em>The Little Prince has been translated into over 500 languages.<em>❦</em>Dr. Seuss wrote Green Eggs and Ham on a bet that he couldn't use only 50 words.<em>❦</em>Libraries in the 1800s often charged a membership fee.</span></div></div>
+  <div class="cols">
+    <section class="box shelfbox">
+      <div class="sec"><h2>Book Picks</h2><span class="limit">under 150 pages</span></div>
+      <div class="budget">Your bookmarks <span class="tok"><i></i><i></i><i class="u"></i></span> <b>2 of 3 left</b><button class="gb small">+ Put a book on the shelf</button></div>
+      <div class="shelf"><div class="book"><div class="cover"><span class="ribbons"><i style="--c:#8fa8ff" class=big></i><i style="--c:#7bd88f"></i></span><img src="https://covers.openlibrary.org/b/id/4942829-L.jpg" alt="Cover of Best New Horror" ></div>
+      <div class="card"><span class="by">picked by</span><span class="nm" style="--mc:#ff9f43;--mf:'UnifrakturMaguntia';--fs:1.05">Matt</span><span class="ti">Best New Horror</span><small>from 20th Century Ghosts</small><span class="meta">28 pp · <b>page turner</b></span></div></div><div class="book"><div class="cover"><span class="ribbons"><i style="--c:#ff9f43"></i></span><img src="https://covers.openlibrary.org/b/id/2547013-L.jpg" alt="Cover of The Stinky Cheese Man" ></div>
+      <div class="card"><span class="by">picked by</span><span class="nm" style="--mc:#b99cff;--mf:'Homemade Apple';--fs:0.8">Sarah</span><span class="ti">The Stinky Cheese Man</span><span class="meta">52 pp · <b>intrigued</b></span></div></div><div class="book"><div class="cover"><span class="ribbons"><i style="--c:#ff9f43"></i><i style="--c:#b99cff" class=big></i><i style="--c:#ff6b6b"></i></span><img src="https://covers.openlibrary.org/b/isbn/9780156012195-L.jpg" alt="Cover of The Little Prince" ></div>
+      <div class="card"><span class="by">picked by</span><span class="nm" style="--mc:#7bd88f;--mf:'Lobster';--fs:1">Kalon</span><span class="ti">The Little Prince</span><span class="meta">96 pp · <b>can't put it down</b></span></div></div><div class="book"><div class="cover"><img src="https://covers.openlibrary.org/b/isbn/9780140177398-L.jpg" alt="Cover of Of Mice and Men" ><span class="pending">awaiting page count</span></div>
+      <div class="card"><span class="by">picked by</span><span class="nm" style="--mc:#ff6b6b;--mf:'Henny Penny';--fs:0.92">Hannah</span><span class="ti">Of Mice and Men</span><span class="meta">? pp</span></div></div></div>
+      <p class="still"><span>Still choosing</span> <span class="nm" style="--mc:#4fd1c5;--mf:'Lobster';--fs:1">Giselle</span> &amp; <span class="nm" style="--mc:#ffd166;--mf:'Henny Penny';--fs:0.92">Junior</span></p>
+      <div class="drop"><div class="hd"><b>The Book Drop</b><small>returned early · one late fee each</small></div>
+        <div class="row"><span>NOV 12</span><span><span class="nm" style="--mc:#6ec6ff;--mf:'Lobster';--fs:1">Anthony</span></span><span>Wuthering Heights</span><span class="late">LATE</span></div></div>
+    </section>
+    <aside class="side">
+      <div class="box chat">
+        <div class="tb"><span class="tbi">&#10086;</span><span>Book Club Chat Room</span></div>
+        <div class="here"><span class="lbl">here now (3/10):</span> <span class="nm" style="--mc:#ff9f43;--mf:'UnifrakturMaguntia';--fs:1.05">Matt</span> <span class="nm" style="--mc:#7bd88f;--mf:'Lobster';--fs:1">Kalon</span> <span class="nm" style="--mc:#b99cff;--mf:'Homemade Apple';--fs:0.8">Sarah</span></div>
+        <div class="log">
+          <p><span class="ts">(8:10 AM)</span><span class="nm" style="--mc:#7bd88f;--mf:'Lobster';--fs:1">Kalon</span>: under 150 pages? what are we reading, chapter books? lol</p>
+          <p class="sys"><span class="ts">(8:19 AM)</span>Sarah put The Stinky Cheese Man on the shelf!</p>
+          <p><span class="ts">(8:21 AM)</span><span class="nm" style="--mc:#b99cff;--mf:'Homemade Apple';--fs:0.8">Sarah</span>: Kids books</p>
+          <p><span class="ts">(8:24 AM)</span><span class="nm" style="--mc:#ff9f43;--mf:'UnifrakturMaguntia';--fs:1.05">Matt</span>: grandma would be so proud of us</p>
+        </div>
+        <div class="send"><input type="text" placeholder="type a message..." aria-label="Message"><button class="gb small">Send</button></div>
+      </div>
+      <div class="box daily">
+        <h3>Daily Reading</h3>
+        <q>You have the energy of a brand-new library card.</q>
+        <div class="orbrow"><span class="orb" aria-hidden="true"></span><span class="count"><span>000168</span><small>likes</small></span></div>
+      </div>
+    </aside>
+  </div>
+  <footer class="foot"><p class="colo">Book Club · a small reading society · est. 2026</p>
+    <div class="badges"><span class="badge"><b>BEST VIEWED</b><i>1024x768</i></span><span class="badge"><b>MADE W/</b><i>LOVE</i></span><span class="badge"><b>BOOKS BY</b><i>OPEN LIBRARY</i></span><span class="badge"><b>ASK</b><i>GRANDMA</i></span></div>
+  </footer>
+</main>
+</body></html>

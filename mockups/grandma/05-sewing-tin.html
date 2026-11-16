@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>5. The Sewing Tin · Book Club look</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cookie&family=Special+Elite&family=Nunito:wght@600;800&family=Lobster&family=UnifrakturMaguntia&family=Homemade+Apple&family=Henny+Penny&family=Courier+Prime:wght@400;700&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap">
+<link rel="stylesheet" href="base.css">
+<style>
+:root{--bg:#3a2216;--tile:url(img/buttons-bg.jpg);--tile-size:420px;--panel:#fbf4e6;--ink:#2e2018;--muted:#8a6d55;--accent:#c0392b;--title:"Cookie",cursive;--display:"Special Elite",monospace;--body:"Nunito",sans-serif}
+.mast{padding:34px 40px 70px;background:#fbf4e6;border-radius:6px;box-shadow:0 0 0 6px #fbf4e6,0 0 0 8px #c0392b,0 18px 34px rgba(0,0,0,.6);outline:2px dashed #c0392b;outline-offset:-16px}
+.mast::before{content:"";position:absolute;left:0;right:0;top:-6px;height:28px;background:repeating-linear-gradient(90deg,#2e2018 0 1px,transparent 1px 9px) 0 100%/100% 9px no-repeat,repeating-linear-gradient(90deg,#2e2018 0 1.5px,transparent 1.5px 45px) 0 100%/100% 16px no-repeat,#f5d547;border-bottom:1px solid #b0901a}
+.spool{position:absolute;bottom:-42px;right:24px;width:min(300px,40vw);transform:rotate(-4deg);z-index:3}
+.hello{font:400 14px "Special Elite";letter-spacing:.2em;color:#c0392b;margin-top:18px}
+.name{color:#2c4a7a;font-size:clamp(66px,12vw,140px)}
+.tag{font:400 17px "Special Elite"}
+.gb{font:800 14px/1 "Nunito";color:#2e2018;padding:12px 18px 12px 46px;border-radius:999px;position:relative;background:var(--c,#f9c9d4);
+  box-shadow:inset 0 0 0 4px rgba(255,255,255,.35),inset 0 -5px 8px rgba(0,0,0,.18),inset 0 4px 6px rgba(255,255,255,.5),0 4px 0 rgba(0,0,0,.25),0 8px 12px rgba(0,0,0,.35)}
+.gb::before{content:"";position:absolute;left:12px;top:50%;width:24px;height:24px;margin-top:-12px;border-radius:50%;
+  background:radial-gradient(circle at 35% 35%,#2e2018 0 2.3px,transparent 2.8px),radial-gradient(circle at 65% 35%,#2e2018 0 2.3px,transparent 2.8px),radial-gradient(circle at 35% 65%,#2e2018 0 2.3px,transparent 2.8px),radial-gradient(circle at 65% 65%,#2e2018 0 2.3px,transparent 2.8px),rgba(0,0,0,.08);
+  box-shadow:inset 0 1px 2px rgba(0,0,0,.25)}
+.gb::after{content:"";position:absolute;left:18px;top:50%;width:12px;height:12px;margin-top:-6px;background:linear-gradient(45deg,transparent 44%,#c0392b 44% 56%,transparent 56%),linear-gradient(-45deg,transparent 44%,#c0392b 44% 56%,transparent 56%)}
+.nav .gb:nth-child(6n+1){--c:#f9c9d4}.nav .gb:nth-child(6n+2){--c:#bfe3d0}.nav .gb:nth-child(6n+3){--c:#fbe39a}.nav .gb:nth-child(6n+4){--c:#cfd8f6}.nav .gb:nth-child(6n+5){--c:#f6c9a4}
+.gb.go{--c:#c0392b;color:#fff}.gb.go::after{background:linear-gradient(45deg,transparent 44%,#fff 44% 56%,transparent 56%),linear-gradient(-45deg,transparent 44%,#fff 44% 56%,transparent 56%)}
+.gb:active{transform:translateY(3px)}.gb.small{--c:#fbe39a;font-size:12.5px;padding:9px 14px 9px 40px}.gb.small::before{width:20px;height:20px;margin-top:-10px;left:11px}.gb.small::after{left:16px}
+.ticker{background:#f5d547;border-block:2px solid #b0901a;box-shadow:0 6px 12px rgba(0,0,0,.5)}
+.ticker::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,#2e2018 0 1px,transparent 1px 9px) 0 0/100% 7px no-repeat;pointer-events:none}
+.ticker b{background:#c0392b;color:#fff;font:400 26px "Cookie"}.ticker .run{font:400 15px "Special Elite";color:#2e2018;padding-top:12px}.ticker em{color:#c0392b}
+.box{--z:10px;background:#fbf4e6;padding:24px 20px;box-shadow:0 14px 28px rgba(0,0,0,.6);
+  -webkit-mask:conic-gradient(from -45deg at bottom,#0000,#000 1deg 89deg,#0000 90deg) 50%/var(--z) 100%;mask:conic-gradient(from -45deg at bottom,#0000,#000 1deg 89deg,#0000 90deg) 50%/var(--z) 100%;padding-bottom:28px}
+.box::before{content:"";position:absolute;inset:9px 9px 16px;border:2px dashed #c0392b;pointer-events:none}
+.side .box{filter:drop-shadow(0 10px 14px rgba(0,0,0,.5))}
+.sec h2{color:#2c4a7a}.limit{font:400 15px "Special Elite";background:#f5d547;transform:rotate(-2deg)}
+.card{background:#fff;border:1px solid #d9c7a8;box-shadow:2px 3px 0 rgba(0,0,0,.08)}
+.card::before{content:"";width:20px;height:20px;margin-top:-20px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff 0 2px,#e74c3c 3px,#a3261a);box-shadow:0 2px 2px rgba(0,0,0,.4)}
+.pending{background:#f5d547;color:#2e2018;border:1px solid #b0901a}
+.chat .tb{background:#2c4a7a;color:#fff;font:400 15px "Special Elite"}.tbi{color:#f5d547}
+.chat .log{background:repeating-linear-gradient(#fbf4e6 0 27px,#d6e2f2 27px 28px)}
+.daily{background:#2c4a7a;color:#fff}.daily::before{border-color:#f5d547}
+.daily h3{font:400 38px "Cookie";color:#f5d547}
+.count span{background:#fbf4e6;color:#2c4a7a;border-radius:6px}
+.foot{font:400 15px "Special Elite"}.foot .colo{background:#f5d547;color:#2e2018;padding:5px 16px;border:1px solid #b0901a;box-shadow:0 4px 8px rgba(0,0,0,.5)}
+</style></head>
+<body class="t5">
+<a class="back" href="index.html">&larr; all 10 looks</a>
+<main class="page">
+  <header class="mast">
+    <div class="mast-in"><p class="hello">Lovingly handmade by</p><h1 class="name">Book Club</h1><p class="tag">&#9733; like game club but for books &#9733;</p></div><img class="spool" src="img/buttons-spool.png" alt="">
+  </header>
+  <nav class="nav">
+    <button class="gb">The Log</button><button class="gb">Books We've Read</button><button class="gb">Crystal Ball of Encouragement &amp; Love</button>
+    <button class="gb">Rules</button><button class="gb">Admin</button><button class="gb go">Sign out, Matt</button>
+  </nav>
+  <div class="ticker"><b>Book Facts</b><div class="run"><span>Agatha Christie learned about poisons working in a hospital pharmacy.<em>❦</em>The Little Prince has been translated into over 500 languages.<em>❦</em>Dr. Seuss wrote Green Eggs and Ham on a bet that he couldn't use only 50 words.<em>❦</em>Libraries in the 1800s often charged a membership fee.</span></div></div>
+  <div class="cols">
+    <section class="box shelfbox">
+      <div class="sec"><h2>Book Picks</h2><span class="limit">under 150 pages</span></div>
+      <div class="budget">Your bookmarks <span class="tok"><i></i><i></i><i class="u"></i></span> <b>2 of 3 left</b><button class="gb small">+ Put a book on the shelf</button></div>
+      <div class="shelf"><div class="book"><div class="cover"><span class="ribbons"><i style="--c:#8fa8ff" class=big></i><i style="--c:#7bd88f"></i></span><img src="https://covers.openlibrary.org/b/id/4942829-L.jpg" alt="Cover of Best New Horror" ></div>
+      <div class="card"><span class="by">picked by</span><span class="nm" style="--mc:#ff9f43;--mf:'UnifrakturMaguntia';--fs:1.05">Matt</span><span class="ti">Best New Horror</span><small>from 20th Century Ghosts</small><span class="meta">28 pp · <b>page turner</b></span></div></div><div class="book"><div class="cover"><span class="ribbons"><i style="--c:#ff9f43"></i></span><img src="https://covers.openlibrary.org/b/id/2547013-L.jpg" alt="Cover of The Stinky Cheese Man" ></div>
+      <div class="card"><span class="by">picked by</span><span class="nm" style="--mc:#b99cff;--mf:'Homemade Apple';--fs:0.8">Sarah</span><span class="ti">The Stinky Cheese Man</span><span class="meta">52 pp · <b>intrigued</b></span></div></div><div class="book"><div class="cover"><span class="ribbons"><i style="--c:#ff9f43"></i><i style="--c:#b99cff" class=big></i><i style="--c:#ff6b6b"></i></span><img src="https://covers.openlibrary.org/b/isbn/9780156012195-L.jpg" alt="Cover of The Little Prince" ></div>
+      <div class="card"><span class="by">picked by</span><span class="nm" style="--mc:#7bd88f;--mf:'Lobster';--fs:1">Kalon</span><span class="ti">The Little Prince</span><span class="meta">96 pp · <b>can't put it down</b></span></div></div><div class="book"><div class="cover"><img src="https://covers.openlibrary.org/b/isbn/9780140177398-L.jpg" alt="Cover of Of Mice and Men" ><span class="pending">awaiting page count</span></div>
+      <div class="card"><span class="by">picked by</span><span class="nm" style="--mc:#ff6b6b;--mf:'Henny Penny';--fs:0.92">Hannah</span><span class="ti">Of Mice and Men</span><span class="meta">? pp</span></div></div></div>
+      <p class="still"><span>Still choosing</span> <span class="nm" style="--mc:#4fd1c5;--mf:'Lobster';--fs:1">Giselle</span> &amp; <span class="nm" style="--mc:#ffd166;--mf:'Henny Penny';--fs:0.92">Junior</span></p>
+      <div class="drop"><div class="hd"><b>The Book Drop</b><small>returned early · one late fee each</small></div>
+        <div class="row"><span>NOV 12</span><span><span class="nm" style="--mc:#6ec6ff;--mf:'Lobster';--fs:1">Anthony</span></span><span>Wuthering Heights</span><span class="late">LATE</span></div></div>
+    </section>
+    <aside class="side">
+      <div class="box chat">
+        <div class="tb"><span class="tbi">&#10086;</span><span>Book Club Chat Room</span></div>
+        <div class="here"><span class="lbl">here now (3/10):</span> <span class="nm" style="--mc:#ff9f43;--mf:'UnifrakturMaguntia';--fs:1.05">Matt</span> <span class="nm" style="--mc:#7bd88f;--mf:'Lobster';--fs:1">Kalon</span> <span class="nm" style="--mc:#b99cff;--mf:'Homemade Apple';--fs:0.8">Sarah</span></div>
+        <div class="log">
+          <p><span class="ts">(8:10 AM)</span><span class="nm" style="--mc:#7bd88f;--mf:'Lobster';--fs:1">Kalon</span>: under 150 pages? what are we reading, chapter books? lol</p>
+          <p class="sys"><span class="ts">(8:19 AM)</span>Sarah put The Stinky Cheese Man on the shelf!</p>
+          <p><span class="ts">(8:21 AM)</span><span class="nm" style="--mc:#b99cff;--mf:'Homemade Apple';--fs:0.8">Sarah</span>: Kids books</p>
+          <p><span class="ts">(8:24 AM)</span><span class="nm" style="--mc:#ff9f43;--mf:'UnifrakturMaguntia';--fs:1.05">Matt</span>: grandma would be so proud of us</p>
+        </div>
+        <div class="send"><input type="text" placeholder="type a message..." aria-label="Message"><button class="gb small">Send</button></div>
+      </div>
+      <div class="box daily">
+        <h3>Daily Reading</h3>
+        <q>You have the energy of a brand-new library card.</q>
+        <div class="orbrow"><span class="orb" aria-hidden="true"></span><span class="count"><span>000168</span><small>likes</small></span></div>
+      </div>
+    </aside>
+  </div>
+  <footer class="foot"><p class="colo">Book Club · a small reading society · est. 2026</p>
+    <div class="badges"><span class="badge"><b>BEST VIEWED</b><i>1024x768</i></span><span class="badge"><b>MADE W/</b><i>LOVE</i></span><span class="badge"><b>BOOKS BY</b><i>OPEN LIBRARY</i></span><span class="badge"><b>ASK</b><i>GRANDMA</i></span></div>
+  </footer>
+</main>
+</body></html>
