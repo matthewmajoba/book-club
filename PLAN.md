@@ -14,7 +14,7 @@ their first Book Club sign-in (the palette and fonts are cozier than Game Club's
 - **Database / backend:** Supabase (free tier), project `book-club`, ref `jpykodpgyrwybapgnbrv`,
   region us-east-1, created 2026-11-15 via CLI. Keys + DB password live only in `.env.local`.
   Free projects pause after ~1 week of no activity; restore with one click.
-- **Hosting:** Vercel, imported from GitHub (github.com/matthewmajoba/book-club, public, no secrets).
+- **Hosting:** Vercel, live at https://book-club-liart-six.vercel.app (Open Graph tags in `index.html` use this address; update them if the domain changes), imported from GitHub (github.com/matthewmajoba/book-club, public, no secrets).
   `.vercelignore` keeps secrets, scripts and supabase/ off the live site.
 - **Book data:** Open Library (no account or key). Search + page counts via the `books` Edge
   Function (`number_of_pages_median` across editions). Covers from `covers.openlibrary.org`.
