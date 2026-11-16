@@ -71,19 +71,38 @@ Deno.serve(async (req) => {
       return json({ book: shape(doc), verdict: verdict(pages, await maxPages()) });
     }
 
-    if (action === "add" || action === "add_manual") {
+    if (action === "add" || action === "add_manual" || action === "add_story") {
       const { data: member, error: authErr } = await db.rpc("member_for_token", { p_token: String(p.token ?? "") });
       if (authErr || !member) return json({ error: "You need to sign in first." }, 401);
 
       if (action === "add_manual") {
         const title = String(p.title ?? "").trim().slice(0, 200);
         const author = String(p.author ?? "").trim().slice(0, 200);
+        const from = String(p.from ?? "").trim().slice(0, 200);
         if (!title) return json({ error: "Type the book's title." }, 400);
         const { data, error } = await db.rpc("add_book_internal", {
           p_member: member, p_key: null, p_title: title, p_author: author || null, p_cover: null, p_pages: null, p_status: "pending",
+          p_from: from || null,
         });
         if (error) return json({ error: error.message }, 400);
         return json({ book: data, verdict: verdict(null, await maxPages()) });
+      }
+
+      // one short story from inside a book: the book's cover + author, the story's title,
+      // and a page check (Open Library doesn't know how long one story is)
+      if (action === "add_story") {
+        const story = String(p.story ?? "").trim().slice(0, 200);
+        if (!story) return json({ error: "Type the story's title." }, 400);
+        if (!validKey(p.key)) return json({ error: "Bad book id." }, 400);
+        const doc = await lookup(p.key);
+        if (!doc) return json({ error: "Open Library doesn't know that book." }, 400);
+        const b = shape(doc);
+        const { data, error } = await db.rpc("add_book_internal", {
+          p_member: member, p_key: b.key, p_title: story, p_author: b.author, p_cover: b.cover, p_pages: null,
+          p_status: "pending", p_from: String(b.title).slice(0, 200),
+        });
+        if (error) return json({ error: error.message }, 400);
+        return json({ book: data });
       }
 
       if (!validKey(p.key)) return json({ error: "Bad book id." }, 400);

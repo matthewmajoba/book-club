@@ -131,6 +131,7 @@ button{font:inherit;color:inherit}
 .talker .hd{background:var(--berry);color:#fff2d6;font:900 8px/1 Arial,sans-serif;letter-spacing:.12em;padding:4px 0 3px}
 .talker .who{display:inline-block;margin-top:5px;padding:0 4px;font:400 18px/1.05 var(--sharpie);color:#2a170f;background:linear-gradient(transparent 52%,color-mix(in srgb,var(--mc) 75%,transparent) 52% 90%,transparent 90%)}
 .talker .say{display:block;font:14px/1 var(--hand);color:#1c3faa;margin:2px 4px 4px;overflow-wrap:anywhere}
+.talker .from{display:block;margin:-2px 4px 4px;font:italic 10px/1.1 Georgia,serif;color:#6a4a2a;overflow-wrap:anywhere}
 .talker .bc{display:flex;justify-content:space-between;align-items:center;gap:4px;border-top:1px dashed #c9b48a;padding:3px 5px;font:700 9px/1 Arial,sans-serif;color:#2a170f;flex-wrap:wrap}
 .case.blank{background:rgba(255,240,210,.035);border:1px dashed rgba(240,215,170,.4);box-shadow:none;margin-right:0;display:grid;place-items:center;padding:6px;color:#c9b89a;font:700 9px/1.2 Arial,sans-serif;text-transform:uppercase;letter-spacing:.06em}
 .case.blank::after{display:none}
@@ -223,7 +224,15 @@ textarea{resize:vertical;min-height:44px}
 .results img,.results .nothumb{width:34px;height:50px;object-fit:cover;flex:none;background:#6a2228;display:grid;place-items:center;font-size:18px}
 .results b{display:block;font-size:13px}
 .results small{display:block;color:#6a5440;font-size:11px}
-.manual{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) auto;gap:8px;margin-top:8px}
+.manual{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px;margin-top:8px}
+.manual .btn{justify-self:start}
+.tip{color:#6a5440;margin-top:-6px}
+.story{background:#fff3cf;border:2px dashed #c9a04a;padding:6px 8px}
+.story summary{cursor:pointer;font:17px/1.2 var(--hand);color:#7a2a1a}
+.story .row{margin:6px 0 4px}
+.story input{flex:1;min-width:160px;width:auto}
+.story small{color:#6a5440}
+.hof small{font:italic 11px Georgia,serif;color:#6a4a2a}
 @media (max-width:520px){.manual{grid-template-columns:minmax(0,1fr)}}
 .verdict{padding:8px 10px;border:2px solid;font-weight:700}
 .verdict.ok{background:#e9f8e4;border-color:#2a6b2a;color:#1d4a1d}

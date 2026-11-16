@@ -272,13 +272,14 @@ function renderShelf() {
   const cells = live.map((b, i) => {
     const m = member(b.member_id), n = per.get(b.id) || 0, ti = tierOf(n, total);
     const pct = total ? Math.round((n / total) * 100) : 0;
-    return h("button", { type: "button", class: "cell", vars: { "--mc": m?.color || "#ccc" }, onclick: () => openBook(b.id), "aria-label": `${b.title}, picked by ${m?.name}` },
+    return h("button", { type: "button", class: "cell", vars: { "--mc": m?.color || "#ccc" }, onclick: () => openBook(b.id), "aria-label": `${b.title}${b.from_title ? `, a story from ${b.from_title}` : ""}, picked by ${m?.name}` },
       caseEl(b, { tier: ti, mine: mine.get(b.id) || 0 }),
       h("div", { class: "edge" }),
       h("div", { class: "talker", vars: { "--r": TILTS[i % TILTS.length] } },
         h("div", { class: "hd" }, "★ CLUB PICK ★"),
         h("span", { class: "who" }, m?.name || "?"),
         h("span", { class: "say" }, b.title),
+        b.from_title ? h("span", { class: "from" }, "from ", b.from_title) : null,
         h("div", { class: "bc" }, h("span", null, b.pages ? `${b.pages} PGS` : "? PGS"), h("span", null, b.status === "pending" ? "WAITING" : `🔖${n} · ${pct}%`))));
   });
   const open = S.members.filter((m) => !livePick(m.id));
@@ -478,26 +479,46 @@ function openAdd() {
           if (res.book?.status === "active") celebrate(); else toast("Sent! It goes on the shelf once the pages get counted.");
         } catch (e) { toast(errMsg(e), true); add.disabled = false; }
       });
+      // or just one short story out of this book (opens by itself when the whole book is too long)
+      const storyIn = h("input", { type: "text", placeholder: "story title (e.g. Best New Horror)", maxLength: 200 });
+      const storyBtn = h("button", { type: "button", class: "btn" }, "Send the story for a page check");
+      const sendStory = async () => {
+        if (!storyIn.value.trim()) return toast("Type the story's title first.", true);
+        storyBtn.disabled = true;
+        try {
+          await callFn({ action: "add_story", token: S.token, key: r.key, story: storyIn.value });
+          closeDialog(); await refreshShelf(); toast("Sent! The story goes on the shelf once its pages get counted.");
+        } catch (e) { toast(errMsg(e), true); storyBtn.disabled = false; }
+      };
+      storyBtn.addEventListener("click", sendStory);
+      storyIn.addEventListener("keydown", (e) => { if (e.key === "Enter") sendStory(); });
+      const story = h("details", { class: "story", open: !v.ok },
+        h("summary", null, v.ok ? "📖 Just reading one story from this book?" : "📖 Too long? Just read one story from it!"),
+        h("div", { class: "row" }, storyIn, storyBtn),
+        h("small", null, `It goes on the shelf as the story, "from ${r.title}", once its pages get counted.`));
       const fake = { title: r.title, author: r.author };
       detail.replaceChildren(h("div", { class: "book-top" },
         h("div", { class: "case" }, r.cover ? h("img", { src: r.cover, alt: `Cover of ${r.title}`, onerror: (e) => e.target.replaceWith(plainCover(fake)) }) : plainCover(fake)),
-        h("div", { class: "facts" }, h("h3", null, r.title), r.author ? h("div", null, "by ", r.author) : null, h("div", { class: "verdict " + v.kind }, v.msg), add)));
+        h("div", { class: "facts" }, h("h3", null, r.title), r.author ? h("div", null, "by ", r.author) : null, h("div", { class: "verdict " + v.kind }, v.msg), v.ok ? add : null, story)));
     } catch (e) { detail.replaceChildren(h("span", { class: "err" }, errMsg(e))); }
   };
   q.addEventListener("input", () => { clearTimeout(timer); timer = setTimeout(search, 350); });
 
   const manual = h("input", { type: "text", placeholder: "book title", maxLength: 200 });
   const manualBy = h("input", { type: "text", placeholder: "author (optional)", maxLength: 200 });
+  const manualFrom = h("input", { type: "text", placeholder: "short story? the book it's in (optional)", maxLength: 200 });
   const manualBtn = h("button", { type: "button", class: "btn" }, "Send it for a check");
   manualBtn.addEventListener("click", async () => {
-    if (!manual.value.trim()) return toast("Type the book's title first.", true);
+    if (!manual.value.trim()) return toast("Type the title first.", true);
     manualBtn.disabled = true;
-    try { await callFn({ action: "add_manual", token: S.token, title: manual.value, author: manualBy.value }); closeDialog(); await refreshShelf(); toast("Sent! It goes on the shelf once the pages get counted."); }
+    try { await callFn({ action: "add_manual", token: S.token, title: manual.value, author: manualBy.value, from: manualFrom.value }); closeDialog(); await refreshShelf(); toast("Sent! It goes on the shelf once the pages get counted."); }
     catch (e) { toast(errMsg(e), true); manualBtn.disabled = false; }
   });
-  body.append(h("h3", null, `Rule: a book, novella or short story under ${maxPages()} pages`), q, results, detail,
+  body.append(h("h3", null, `Rule: a book, novella or short story under ${maxPages()} pages`),
+    h("small", { class: "tip" }, "Short story inside a bigger book? Search the book, pick it, then choose \"just one story.\""),
+    q, results, detail,
     h("details", null, h("summary", null, "Can't find it?"),
-      h("div", { class: "manual" }, manual, manualBy, manualBtn),
+      h("div", { class: "manual" }, manual, manualBy, manualFrom, manualBtn),
       h("small", null, "The pages get counted by hand before it goes on the shelf.")));
   setTimeout(() => q.focus(), 30);
 }
@@ -525,6 +546,7 @@ async function refreshBookDialog() {
 
   const top = h("div", { class: "book-top" }, caseEl(b, { sticker: b.status === "active", tier: ti }),
     h("div", { class: "facts" },
+      b.from_title ? h("div", null, h("b", null, "A story from: "), h("i", null, b.from_title)) : null,
       b.author ? h("div", null, h("b", null, "By: "), b.author) : null,
       h("div", null, "Picked by ", nameEl(picker)),
       h("div", null, h("b", null, "Length: "), b.pages ? `about ${b.pages} pages${b.pages_source === "admin" ? " (counted by hand)" : ""}` : "unknown (needs a page check)"),
@@ -616,7 +638,7 @@ async function openLog() {
 function openRead() {
   const body = dialog("📚 Books We've Read", { wide: true });
   body.append(S.read.length ? h("div", { class: "hof" }, S.read.map((b) => h("div", null,
-    b.cover_url ? coverImg(b) : plainCover(b), h("b", null, b.title), h("span", null, "picked by ", member(b.member_id)?.name || "?"))))
+    b.cover_url ? coverImg(b) : plainCover(b), h("b", null, b.title), b.from_title ? h("small", null, "from ", b.from_title) : null, h("span", null, "picked by ", member(b.member_id)?.name || "?"))))
     : h("p", null, "Nothing read yet. Go put some books on the shelf!"));
 }
 // Crystal Ball of Encouragement and Love: every finished day's saying and how many likes it got (saved at midnight Pacific)
@@ -639,6 +661,7 @@ function openRules() {
   const body = dialog("The Rules");
   body.append(h("ol", { class: "rules" },
     h("li", null, `One pick each: a book, novella or short story under ${maxPages()} pages.`),
+    h("li", null, "A short story from inside a bigger book counts. Search the book and pick \"just one story.\""),
     h("li", null, "You get 3 🔖 bookmarks to vote with. Put 2 in one book for a big vote."),
     h("li", null, "Returning your pick early = +1 late fee. Forever."),
     h("li", null, "The most-bookmarked book wins. Then we all read it.")));

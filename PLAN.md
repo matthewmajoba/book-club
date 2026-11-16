@@ -23,7 +23,11 @@ their first Book Club sign-in (the palette and fonts are cozier than Game Club's
 ## Rules
 - One pick each on the shelf: a book, novella or short story **under 150 pages** (`rounds.max_pages`).
   - ≤ 150: fine. 151–180 (up to 20% over): "ok but just this once cause I love you!" Over 180: blocked.
-  - Short stories usually aren't in Open Library on their own: use "Can't find it?" and the admin types the page count.
+  - **Short stories from inside a bigger book** (e.g. "Best New Horror" from 20th Century Ghosts): search the
+    book, pick it, open "Just reading one story from this book?" (opens by itself when the book is too long) and type
+    the story's title. It goes on the shelf as the story with the book's cover, labeled "from <book>"
+    (`books.from_title`), after the admin types its page count (Open Library has no per-story lengths or
+    tables of contents to read them from). "Can't find it?" also has an optional "the book it's in" box.
   - Open Library has no page count (or the book isn't there): goes to "page check" until the
     admin types the page count.
 - 3 🔖 bookmarks per person to vote with; 2 in one book = a big vote.
