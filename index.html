@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Book Club</title>
 <meta name="description" content="Our cozy little book club. Pick a book, vote with your 3 bookmarks, chat, read.">
-<meta name="theme-color" content="#efe6d8">
+<meta name="theme-color" content="#1b1b1b">
 <!-- link previews (texts, Discord, iMessage, etc.) -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Book Club">
@@ -15,7 +15,7 @@
 <meta property="og:image" content="https://book-club-liart-six.vercel.app/img/og-image.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Book Club: a botanical masthead on floral wallpaper">
+<meta property="og:image:alt" content="Book Club: a granny-square afghan masthead on a crocheted blanket">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Book Club">
 <meta name="twitter:description" content="Our cozy little book club.">
@@ -29,7 +29,7 @@
 <script>
 try {
   var L = JSON.parse(localStorage.getItem("bc_look") || "null");
-  if (L) {
+  if (L && L.v === 2) {
     var R = document.documentElement;
     for (var k in L.vars) R.style.setProperty(k, L.vars[k]);
     R.dataset.frame = L.frame; R.dataset.ground = L.ground;
@@ -39,64 +39,19 @@ try {
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&family=Bungee&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400;1,500;1,600&family=Courier+Prime:wght@400;700&family=Creepster&family=Fredericka+the+Great&family=Henny+Penny&family=Homemade+Apple&family=IM+Fell+English+SC&family=Lobster&family=Mountains+of+Christmas:wght@700&family=Noto+Sans+Runic&family=Nothing+You+Could+Do&family=Special+Elite&family=UnifrakturMaguntia&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&family=Bungee&family=Courier+Prime:wght@400;700&family=Creepster&family=Fredericka+the+Great&family=Grandstander:ital,wght@0,700;0,900;1,700;1,800&family=Henny+Penny&family=Homemade+Apple&family=IM+Fell+English+SC&family=Lobster&family=Mountains+of+Christmas:wght@700&family=Noto+Sans+Runic&family=Nunito:ital,wght@0,600;0,800;1,600&family=Special+Elite&family=UnifrakturMaguntia&display=swap">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="tab-shelf">
 <main class="page">
   <header class="panel mast">
-    <div class="mast-line">
-      <span id="dateline"></span>
-      <span id="volline">Vol. I</span>
-      <span id="nowline"></span>
-    </div>
-    <div class="mast-title">
-      <svg class="sprig" viewBox="0 0 70 110" aria-hidden="true">
-        <g class="stem"><path d="M40 108C37 84 33 58 40 30C43 18 48 9 55 2"/><path d="M36 64C28 58 22 50 20 40"/></g>
-        <g class="leaves">
-          <path transform="translate(38 94) rotate(-160)" d="M0 0C3-5 10-7 15-6C11-2 5 1 0 0Z"/>
-          <path transform="translate(37 82) rotate(-28)" d="M0 0C3-5 10-7 15-6C11-2 5 1 0 0Z"/>
-          <path transform="translate(35 70) rotate(-150)" d="M0 0C3-5 10-7 13-6C10-2 5 1 0 0Z"/>
-          <path transform="translate(35 55) rotate(-36)" d="M0 0C3-5 10-7 13-6C10-2 5 1 0 0Z"/>
-          <path transform="translate(37 43) rotate(-138)" d="M0 0C3-5 8-6 11-5C8-2 4 1 0 0Z"/>
-          <path transform="translate(25 52) rotate(-118)" d="M0 0C2-4 7-5 9-4C7-1 3 1 0 0Z"/>
-        </g>
-        <g class="buds">
-          <ellipse cx="43" cy="25" rx="2" ry="3.2" transform="rotate(30 43 25)"/>
-          <ellipse cx="48.5" cy="17" rx="1.9" ry="3" transform="rotate(35 48.5 17)"/>
-          <ellipse cx="45" cy="15" rx="1.6" ry="2.6" transform="rotate(-20 45 15)"/>
-          <ellipse cx="52.5" cy="9.5" rx="1.7" ry="2.7" transform="rotate(40 52.5 9.5)"/>
-          <ellipse cx="50" cy="7" rx="1.4" ry="2.3" transform="rotate(-10 50 7)"/>
-          <circle cx="55.5" cy="2.5" r="1.5"/>
-          <circle cx="19.5" cy="38.5" r="1.9"/><circle cx="22.8" cy="37.2" r="1.5"/><circle cx="18.2" cy="35" r="1.4"/>
-        </g>
-      </svg>
-      <h1 class="logo" id="club-name">Book Club</h1>
-      <svg class="sprig r" viewBox="0 0 70 110" aria-hidden="true">
-        <g class="stem"><path d="M40 108C37 84 33 58 40 30C43 18 48 9 55 2"/><path d="M36 64C28 58 22 50 20 40"/></g>
-        <g class="leaves">
-          <path transform="translate(38 94) rotate(-160)" d="M0 0C3-5 10-7 15-6C11-2 5 1 0 0Z"/>
-          <path transform="translate(37 82) rotate(-28)" d="M0 0C3-5 10-7 15-6C11-2 5 1 0 0Z"/>
-          <path transform="translate(35 70) rotate(-150)" d="M0 0C3-5 10-7 13-6C10-2 5 1 0 0Z"/>
-          <path transform="translate(35 55) rotate(-36)" d="M0 0C3-5 10-7 13-6C10-2 5 1 0 0Z"/>
-          <path transform="translate(37 43) rotate(-138)" d="M0 0C3-5 8-6 11-5C8-2 4 1 0 0Z"/>
-          <path transform="translate(25 52) rotate(-118)" d="M0 0C2-4 7-5 9-4C7-1 3 1 0 0Z"/>
-        </g>
-        <g class="buds">
-          <ellipse cx="43" cy="25" rx="2" ry="3.2" transform="rotate(30 43 25)"/>
-          <ellipse cx="48.5" cy="17" rx="1.9" ry="3" transform="rotate(35 48.5 17)"/>
-          <ellipse cx="45" cy="15" rx="1.6" ry="2.6" transform="rotate(-20 45 15)"/>
-          <ellipse cx="52.5" cy="9.5" rx="1.7" ry="2.7" transform="rotate(40 52.5 9.5)"/>
-          <ellipse cx="50" cy="7" rx="1.4" ry="2.3" transform="rotate(-10 50 7)"/>
-          <circle cx="55.5" cy="2.5" r="1.5"/>
-          <circle cx="19.5" cy="38.5" r="1.9"/><circle cx="22.8" cy="37.2" r="1.5"/><circle cx="18.2" cy="35" r="1.4"/>
-        </g>
-      </svg>
-    </div>
+    <figure class="snap" aria-hidden="true"><img src="img/grandmas-wip.jpg" alt="" width="560" height="420"><figcaption>Grandma's WIP</figcaption></figure>
+    <p class="hello">Made with love by</p>
+    <h1 class="logo" id="club-name">Book Club</h1>
     <p class="tagline" id="tagline">★ like game club but for books ★</p>
-    <div class="mast-rule" aria-hidden="true"><span class="seal" id="seal">BC</span></div>
-    <nav class="nav" id="nav"></nav>
+    <p class="nowline" id="nowline"></p>
   </header>
+  <nav class="nav" id="nav" aria-label="Menu"></nav>
 
   <div class="ticker" aria-label="Stupid but true book facts"><div class="lbl">Book Facts</div><div class="run"><span id="facts">Dusting off the facts...</span></div></div>
 
@@ -128,10 +83,11 @@ try {
     <p class="colophon" id="colophon">Book Club · a small reading society</p>
     <div class="badges">
       <span class="badge"><b>BEST VIEWED</b><i>1024x768</i></span>
-      <span class="badge"><b>MADE W/</b><i>NOTEPAD</i></span>
+      <span class="badge"><b>MADE W/</b><i>LOVE</i></span>
       <span class="badge"><b>BOOKS BY</b><i>OPEN LIBRARY</i></span>
-      <span class="badge"><b>POWERED BY</b><i>TEA</i></span>
+      <span class="badge"><b>ASK</b><i>GRANDMA</i></span>
     </div>
+    <a class="credits" href="credits.html">photo credits</a>
   </footer>
 </main>
 

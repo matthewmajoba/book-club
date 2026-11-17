@@ -4,7 +4,7 @@
 import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/+esm";
 import { SUPABASE_URL, SUPABASE_ANON_KEY } from "./config.js";
 import { initPep } from "./pep.js";
-import { applyLook, lookOf, monogram, COLORWAYS, WALLPAPERS, FRAMES } from "./look.js";
+import { applyLook, lookOf, wallUrl, COLORWAYS, WALLPAPERS, FRAMES } from "./look.js";
 
 const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, { auth: { persistSession: false } });
 const FN_URL = `${SUPABASE_URL}/functions/v1/books`;
@@ -217,33 +217,30 @@ const livePick = (memberId) => S.books.find((b) => b.member_id === memberId && (
 const maxPages = () => Number(S.round?.max_pages || 150);
 
 // ---------- render: header ----------
-// the masthead: dateline, the club's name + tagline, its wax seal (all set by the admin's look)
+// the masthead: the club's name + tagline (set by the admin's look) and what we're reading now
 function renderMast(l = S.look) {
   $("club-name").textContent = l.club_name;
   $("tagline").textContent = l.tagline;
   $("tagline").hidden = !l.tagline;
-  $("seal").textContent = monogram(l.club_name);
   $("chat-title").textContent = `${l.club_name} Chat Room`;
-  $("colophon").textContent = `${l.club_name} · a small reading society · est. MMXXVI`;
+  $("colophon").textContent = `${l.club_name} · a small reading society · est. 2026`;
   document.title = l.club_name;
-  $("dateline").textContent = new Date().toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric" });
-  const no = S.round?.id || 1;
-  $("volline").textContent = `Vol. I · No. ${ROMAN[no] || no}`;
   const live = S.books.filter((b) => b.status === "active" || b.status === "pending").length;
   $("nowline").textContent = S.read[0] ? `Now reading: ${S.read[0].title}` : live ? `${live} on the shelf` : "the shelf is open";
 }
+// the menu: a row of granny-square buttons under the masthead
 function renderNav() {
   renderMast();
   const nav = $("nav");
-  const link = (label, fn, cls = "") => h("button", { type: "button", class: "nl " + cls, onclick: fn }, label);
+  const btn = (label, fn, cls = "") => h("button", { type: "button", class: "gb " + cls, onclick: fn }, label);
   const items = [
-    link("The Log", openLog),
-    link("Books We've Read", openRead),
-    link("Crystal Ball of Encouragement & Love", openLoveNotes),
-    link("Rules", openRules),
+    btn("The Log", openLog),
+    btn("Books We've Read", openRead),
+    btn("Crystal Ball of Encouragement & Love", openLoveNotes),
+    btn("Rules", openRules),
   ];
-  if (S.me?.is_admin) items.push(link("Admin", openAdmin));
-  items.push(S.me ? link(`Sign out, ${S.me.name}`, signOut, "me") : link("Sign in", openLogin, "go"));
+  if (S.me?.is_admin) items.push(btn("Admin", openAdmin));
+  items.push(S.me ? btn(`Sign out, ${S.me.name}`, signOut, "go") : btn("Sign in", openLogin, "go"));
   nav.replaceChildren(...items);
   $("round-badge").textContent = `under ${maxPages()} pages`;
   $("round-no").textContent = `The Shelf · No. ${ROMAN[S.round?.id] || S.round?.id || "I"}`;
@@ -758,13 +755,13 @@ function lookPicker() {
   const cw = h("div", { class: "looks" }), wp = h("div", { class: "looks" }), fr = h("div", { class: "looks" });
   const opt = (id, cur, label, thumb, set) => h("button", { type: "button", class: id === cur ? "sel" : "", "aria-pressed": String(id === cur), onclick: () => { set(id); preview(); } }, thumb, label);
   const draw = () => {
-    const c = COLORWAYS[draft.colorway];
+    const c = COLORWAYS[draft.colorway], wall = `url("${wallUrl(draft.wallpaper, true)}") 0 0/120px auto, ${WALLPAPERS[draft.wallpaper].ground}`;
     cw.replaceChildren(...Object.entries(COLORWAYS).map(([id, k]) => opt(id, draft.colorway, k.name,
-      h("span", { class: "th cw", vars: { "--g": k.ground } }, [k.motif, k.accent, k.soft].map((col) => h("i", { vars: { background: col } }))), (v) => { draft.colorway = v; })));
+      h("span", { class: "th cw", vars: { "--g": k.paper } }, [k.accent, ...k.rounds].map((col) => h("i", { vars: { background: col } }))), (v) => { draft.colorway = v; })));
     wp.replaceChildren(...Object.entries(WALLPAPERS).map(([id, w]) => opt(id, draft.wallpaper, w.name,
-      h("span", { class: "th", vars: { background: `${w.draw(c)}, ${c.ground}` } }), (v) => { draft.wallpaper = v; })));
+      h("span", { class: "th", vars: { background: `url("${wallUrl(id, true)}") center/cover, ${w.ground}` } }), (v) => { draft.wallpaper = v; })));
     fr.replaceChildren(...Object.entries(FRAMES).map(([id, f]) => opt(id, draft.frame, f.name,
-      h("span", { class: "th fr", vars: { "--f": f.draw(c), "--accent": c.accent, "--paper": c.paper, background: `${WALLPAPERS[draft.wallpaper].draw(c)}, ${c.ground}` } }), (v) => { draft.frame = v; })));
+      h("span", { class: "th fr", vars: { "--f": f.draw(c, c.rounds), "--edge": c.edge, "--paper": c.paper, background: wall } }), (v) => { draft.frame = v; })));
   };
   const preview = () => {
     draft.club_name = name.value.trim() || S.look.club_name;
@@ -792,19 +789,19 @@ function lookPicker() {
     h("div", { class: "look-text" },
       h("label", null, "Club name", name),
       h("label", null, "Tagline", tag)),
-    h("b", { class: "kicker" }, "Colors"), cw,
-    h("b", { class: "kicker" }, "Wallpaper"), wp,
-    h("b", { class: "kicker" }, "Frame"), fr,
+    h("b", { class: "kicker" }, "Yarn colors"), cw,
+    h("b", { class: "kicker" }, "Wallpaper (real photos)"), wp,
+    h("b", { class: "kicker" }, "Crochet border"), fr,
     h("div", { class: "savebar" }, save,
       h("button", { type: "button", class: "btn", onclick: () => fill(S.look) }, "Undo my changes"),
-      h("button", { type: "button", class: "btn", onclick: () => fill({ ...lookOf(null), club_name: name.value.trim() || S.look.club_name, tagline: tag.value }) }, "Original colors + patterns")),
+      h("button", { type: "button", class: "btn", onclick: () => fill({ ...lookOf(null), club_name: name.value.trim() || S.look.club_name, tagline: tag.value }) }, "Back to the original look")),
   ];
 }
 
 // ---------- fun stuff ----------
 function celebrate(word = "NEW BOOK!") {
   const c = COLORWAYS[S.look.colorway];
-  const colors = [c.accent, c.motif, c.soft, "#e7c97c", c.paper, "#f2b8c6"];
+  const colors = [c.accent, ...c.rounds, ...c.pastels];
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (!reduce) for (let i = 0; i < 90; i++) {
     const c = h("div", { class: "confetti" + (i % 3 ? "" : " leaf"), vars: {

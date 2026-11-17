@@ -35,23 +35,30 @@ their first Book Club sign-in (the palette and fonts are cozier than Game Club's
   slip with a LATE stamp in the **Book Drop**.
 - Admin crowns the most-bookmarked book; it goes to **📚 Books We've Read** and the shelf clears.
 
-## Look (redesigned 2026-11-16 for pitching to bookstores)
+## Look (granny-square afghan, picked 2026-11-16 from 10 mockups in `mockups/grandma/`)
 - Early-2000s website bones (one centered page on tiled wallpaper, framed boxes, a marquee,
-  plain-word nav, 80x15 footer badges) set like a literary magazine: Cormorant Garamond italic
-  headings, Georgia text, Verdana small-caps labels, Courier Prime for typed bits, "Nothing You
-  Could Do" for handwriting. No fake wood, plaid or fairy lights.
-- **The admin picks the look** (Admin → The look): club name, tagline, colors (8), wallpaper (10)
-  and frame (9). Clicking previews it only for the admin; Save writes `club_look` (one row,
-  `set_look` RPC) and everyone's page switches live. Patterns are SVGs drawn in `js/look.js` from
-  the chosen colors, so any combo works; frames are 36px border-images sliced at 12px. A small
-  script in `index.html` puts the last-seen look back before first paint.
-- Masthead: dateline (date · Vol. I · No. <round> · now reading), the club name huge in italic,
-  botanical sprigs either side, handwritten tagline, a double rule with a wax seal monogram
-  (initials of the club name), then the nav.
+  80x15 footer badges) dressed like grandma's crocheted afghan: campy, loud, never fake wood.
+  Grandstander (chunky) headings and buttons, Nunito text, Courier Prime for typed bits.
+- Wallpaper is a **real photo** of grandma's things, tiled (Wikimedia Commons, all CC BY / CC BY-SA /
+  CC0 / public domain; `credits.html` names every photographer, linked from the footer).
+  `scripts/make_wallpapers.py` copies them from the mockups into `img/wall/` with thumbnails.
+- Every box is crocheted round and round (a border-image SVG drawn in `js/look.js`, 150px sliced at
+  30); the chat + Daily Reading use a second set of yarn colors.
+- Buttons are little granny squares (dark edge, two rounds, a dotted center), each a different color.
+- **The admin picks the look** (Admin → The look): club name, tagline, yarn colors (7), photo
+  wallpaper (15) and crochet border (5: three rounds, shell stitch, granny squares, ric-rac,
+  blanket stitch). Clicking previews it only for the admin; Save writes `club_look` (one row,
+  `set_look` RPC; columns colorway = yarn, wallpaper, frame) and everyone's page switches live.
+  Unknown names fall back to the defaults (rainbow / granny / rounds). A small script in
+  `index.html` puts the last-seen look back before first paint.
+- Masthead: "Made with love by", the club name huge with stacked yarn-colored shadows, the tagline,
+  a "now reading" tag, and a "Grandma's WIP" polaroid in the corner (hidden on phones). The menu
+  is its own row of granny-square buttons under it, so nothing ever covers it.
 - Ticker: BOOK FACTS typed on a strip of paper (~140 stupid-but-true facts in `facts`).
-- Shelf: books faced out on a shelf drawn with two ink rules; each vote is a bookmark ribbon
+- Shelf: books faced out on a striped crocheted runner; each vote is a bookmark ribbon
   poking out of the top in the voter's color (big votes stand taller); bookseller shelf-talker
-  cards under each book; "Still choosing: ..." line for everyone without a pick.
+  cards under each book; "Still choosing: ..." line for members without a pick who have
+  signed in at least once.
 - Book Drop: a library date-due card with LATE stamps.
 - Bookmark tiers (share of all bookmarks): DUSTY · SKIMMING · INTRIGUED · PAGE TURNER ·
   CAN'T PUT IT DOWN (shown as words on the shelf-talker).
@@ -64,4 +71,4 @@ their first Book Club sign-in (the palette and fonts are cozier than Game Club's
 ## Re-deploy after changes
 - New migration file: `npx supabase db push`.
 - Function: `npx supabase functions deploy books --no-verify-jwt --use-api`.
-- Preview image + icons: `python scripts/make_share_images.py` (draws the default Claret look).
+- Preview image + icons: `python scripts/make_share_images.py` (draws the default granny look).

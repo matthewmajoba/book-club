@@ -4,8 +4,8 @@
   "description": "Our cozy little book club.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#efe6d8",
-  "theme_color": "#efe6d8",
+  "background_color": "#fffaf0",
+  "theme_color": "#1b1b1b",
   "icons": [
     { "src": "img/icon-192.png", "sizes": "192x192", "type": "image/png" },
     { "src": "img/icon-512.png", "sizes": "512x512", "type": "image/png" }
