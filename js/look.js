@@ -4,7 +4,7 @@
 // The borders are SVGs drawn here from the yarn colors, so any border works with any yarn.
 
 export const DEFAULT_LOOK = {
-  club_name: "Book Club", tagline: "★ like game club but for books ★",
+  club_name: "Book Club", tagline: "like game club but for books",
   colorway: "rainbow", wallpaper: "granny", frame: "rounds",
 };
 

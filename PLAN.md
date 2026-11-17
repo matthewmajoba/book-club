@@ -51,7 +51,7 @@ their first Book Club sign-in (the palette and fonts are cozier than Game Club's
   `set_look` RPC; columns colorway = yarn, wallpaper, frame) and everyone's page switches live.
   Unknown names fall back to the defaults (rainbow / granny / rounds). A small script in
   `index.html` puts the last-seen look back before first paint.
-- Masthead: "Made with love by", the club name huge with stacked yarn-colored shadows, the tagline,
+- Masthead: the club name huge with stacked yarn-colored shadows, the tagline,
   and a "now reading" tag. The menu
   is its own row of granny-square buttons under it, so nothing ever covers it.
 - Ticker: BOOK FACTS typed on a strip of paper (~140 stupid-but-true facts in `facts`).

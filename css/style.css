@@ -41,8 +41,7 @@ a{color:var(--accent)}
 
 /* ---------- masthead ---------- */
 .mast{text-align:center;padding:clamp(16px,3.4vw,30px) clamp(12px,4vw,34px) clamp(16px,3vw,26px)}
-.hello{margin:0;font:800 12px/1.2 var(--ui);letter-spacing:.3em;padding-left:.3em;text-transform:uppercase;color:color-mix(in srgb,var(--edge) 72%,var(--paper))}
-.logo{margin:6px 0 0;padding:0 .12em 12px 0;font:900 clamp(50px,10.5vw,124px)/1 var(--serif);letter-spacing:.005em;color:var(--accent);text-wrap:balance;overflow-wrap:anywhere;
+.logo{margin:0;padding:0 .12em 12px 0;font:900 clamp(50px,10.5vw,124px)/1 var(--serif);letter-spacing:.005em;color:var(--accent);text-wrap:balance;overflow-wrap:anywhere;
   text-shadow:4px 4px 0 var(--r2),8px 8px 0 var(--r3),12px 12px 0 var(--edge)}
 .tagline{margin:8px 0 0;font:800 clamp(15px,2vw,18px)/1.3 var(--ui);color:var(--ink)}
 .nowline{display:inline-block;margin:14px 0 0;max-width:100%;font:800 11.5px/1.25 var(--ui);letter-spacing:.14em;text-transform:uppercase;background:var(--edge);color:var(--paper);padding:7px 12px 6px;box-shadow:0 0 0 3px var(--r2);overflow-wrap:anywhere}

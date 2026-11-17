@@ -10,7 +10,7 @@ from PIL import Image, ImageDraw, ImageFilter, ImageFont
 ROOT = Path(__file__).resolve().parent.parent
 IMG = ROOT / "img"
 F = "C:/Windows/Fonts/"
-COOPER, SEGOE_B, SYM = F + "COOPBL.TTF", F + "segoeuib.ttf", F + "seguisym.ttf"
+COOPER, SEGOE_B = F + "COOPBL.TTF", F + "segoeuib.ttf"
 
 # the "Rainbow scraps" yarn
 ACCENT, EDGE, PAPER, INK = (214, 51, 108), (27, 27, 27), (255, 250, 240), (38, 32, 28)
@@ -25,15 +25,6 @@ def rounds(d, box, rings):
         d.rectangle([x0, y0, x1, y1], fill=col)
         x0, y0, x1, y1 = x0 + w, y0 + w, x1 - w, y1 - w
     return x0, y0, x1, y1
-
-
-def spaced(d, xy, text, font, fill, spacing):
-    """Centered text with letter spacing."""
-    widths = [d.textlength(ch, font=font) for ch in text]
-    x = xy[0] - (sum(widths) + spacing * (len(text) - 1)) / 2
-    for ch, w in zip(text, widths):
-        d.text((x, xy[1]), ch, font=font, fill=fill, anchor="lm")
-        x += w + spacing
 
 
 def og():
@@ -52,16 +43,10 @@ def og():
     d = ImageDraw.Draw(out)
     rounds(d, box, [(EDGE, 9 * K), (R3, 8 * K), (R2, 8 * K), (R1, 8 * K), (PAPER, 0)])
     cx = (box[0] + box[2]) // 2
-    spaced(d, (cx, 175 * K), "MADE WITH LOVE BY", ImageFont.truetype(SEGOE_B, 19 * K), (95, 88, 82), 6 * K)
     big = ImageFont.truetype(COOPER, 150 * K)
     for off, col in [(15, EDGE), (10, R3), (5, R2), (0, ACCENT)]:
-        d.text((cx + off * K - 8 * K, 300 * K + off * K), "Book Club", font=big, fill=col, anchor="mm")
-    tf, sf = ImageFont.truetype(SEGOE_B, 30 * K), ImageFont.truetype(SYM, 26 * K)
-    tag, gap = "like game club but for books", 18 * K
-    tw = d.textlength(tag, font=tf)
-    d.text((cx, 452 * K), tag, font=tf, fill=INK, anchor="mm")
-    for x in (cx - tw / 2 - gap, cx + tw / 2 + gap):  # Segoe UI has no star, so they come from Segoe UI Symbol
-        d.text((x, 454 * K), "\u2605", font=sf, fill=INK, anchor="mm")
+        d.text((cx + off * K - 8 * K, 278 * K + off * K), "Book Club", font=big, fill=col, anchor="mm")
+    d.text((cx, 432 * K), "like game club but for books", font=ImageFont.truetype(SEGOE_B, 32 * K), fill=INK, anchor="mm")
     out.convert("RGB").resize((1200, 630), Image.LANCZOS).save(IMG / "og-image.jpg", quality=88, optimize=True, progressive=True)
 
 
