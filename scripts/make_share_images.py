@@ -1,4 +1,4 @@
-"""Make the link-preview image (og-image.jpg) and app icons in Book Club's granny-square look:
+"""Make the link-preview image (og-granny.jpg) and app icons in Book Club's granny-square look:
 the real granny-square afghan photo as wallpaper, a cream card crocheted round and round, the name in
 chunky '70s type with stacked yarn-colored shadows (the site's default
 look, see js/look.js). The icons are a granny square.
@@ -47,7 +47,12 @@ def og():
     for off, col in [(15, EDGE), (10, R3), (5, R2), (0, ACCENT)]:
         d.text((cx + off * K - 8 * K, 278 * K + off * K), "Book Club", font=big, fill=col, anchor="mm")
     d.text((cx, 432 * K), "like game club but for books", font=ImageFont.truetype(SEGOE_B, 32 * K), fill=INK, anchor="mm")
-    out.convert("RGB").resize((1200, 630), Image.LANCZOS).save(IMG / "og-image.jpg", quality=88, optimize=True, progressive=True)
+    img = out.convert("RGB").resize((1200, 630), Image.LANCZOS)
+    # index.html points at og-granny.jpg; change that name whenever the picture changes, because
+    # iMessage, Discord, Facebook etc. cache link previews by image address. og-image.jpg (the old
+    # name) gets the same picture so anything still pointing there shows the new one too.
+    for name in ("og-granny.jpg", "og-image.jpg"):
+        img.save(IMG / name, quality=88, optimize=True, progressive=True)
 
 
 def granny_square(s, rings):
@@ -75,4 +80,4 @@ if __name__ == "__main__":
     icon(192, IMG / "icon-192.png")
     icon(512, IMG / "icon-512.png")
     icon(32, IMG / "favicon-32.png")
-    print("made og-image.jpg + icons in img/")
+    print("made og-granny.jpg + icons in img/")

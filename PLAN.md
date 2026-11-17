@@ -72,3 +72,5 @@ their first Book Club sign-in (the palette and fonts are cozier than Game Club's
 - New migration file: `npx supabase db push`.
 - Function: `npx supabase functions deploy books --no-verify-jwt --use-api`.
 - Preview image + icons: `python scripts/make_share_images.py` (draws the default granny look).
+  When the picture changes, give it a new file name in the script and in `index.html`'s og:image /
+  twitter:image tags: chat apps cache link previews by the image's address.
