@@ -62,7 +62,7 @@ their first Book Club sign-in (the palette and fonts are cozier than Game Club's
 - Book Drop: a library date-due card with LATE stamps.
 - Bookmark tiers (share of all bookmarks): DUSTY · SKIMMING · INTRIGUED · PAGE TURNER ·
   CAN'T PUT IT DOWN (shown as words on the shelf-talker).
-- Names: each member's font, in a darkened shade of their color with a highlighter swipe of it.
+- Names: each member's font, in a darkened shade of their color (no highlighter bar).
 - Chat: a 2000s messenger window in the club's colors; a shop bell rings when someone comes in.
 - **Daily Reading** (under the chat) and the **🔮 Crystal Ball of Encouragement and Love** archive
   work exactly like Game Club's (`js/pep.js` is a straight copy), with 30 book-flavored sayings.
