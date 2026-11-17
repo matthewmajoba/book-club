@@ -41,11 +41,6 @@ a{color:var(--accent)}
 
 /* ---------- masthead ---------- */
 .mast{text-align:center;padding:clamp(16px,3.4vw,30px) clamp(12px,4vw,34px) clamp(16px,3vw,26px)}
-.snap{position:absolute;right:-34px;top:-40px;z-index:3;margin:0;width:176px;background:#fff;padding:8px 8px 6px;transform:rotate(7deg);box-shadow:0 10px 18px rgba(0,0,0,.45)}
-.snap img{display:block;width:100%;height:auto}
-.snap figcaption{font:800 13px/1 var(--serif);text-align:center;margin-top:7px;color:#444}
-@media (max-width:900px){.snap{width:130px;right:-20px;top:-30px}}
-@media (max-width:760px){.snap{display:none}}
 .hello{margin:0;font:800 12px/1.2 var(--ui);letter-spacing:.3em;padding-left:.3em;text-transform:uppercase;color:color-mix(in srgb,var(--edge) 72%,var(--paper))}
 .logo{margin:6px 0 0;padding:0 .12em 12px 0;font:900 clamp(50px,10.5vw,124px)/1 var(--serif);letter-spacing:.005em;color:var(--accent);text-wrap:balance;overflow-wrap:anywhere;
   text-shadow:4px 4px 0 var(--r2),8px 8px 0 var(--r3),12px 12px 0 var(--edge)}

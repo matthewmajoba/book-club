@@ -1,6 +1,6 @@
 """Make the link-preview image (og-image.jpg) and app icons in Book Club's granny-square look:
 the real granny-square afghan photo as wallpaper, a cream card crocheted round and round, the name in
-chunky '70s type with stacked yarn-colored shadows, and grandma's WIP polaroid (the site's default
+chunky '70s type with stacked yarn-colored shadows (the site's default
 look, see js/look.js). The icons are a granny square.
 Run: python scripts/make_wallpapers.py first, then python scripts/make_share_images.py
 (needs Pillow; uses Windows' Cooper Black + Segoe UI Bold)"""
@@ -62,19 +62,6 @@ def og():
     d.text((cx, 452 * K), tag, font=tf, fill=INK, anchor="mm")
     for x in (cx - tw / 2 - gap, cx + tw / 2 + gap):  # Segoe UI has no star, so they come from Segoe UI Symbol
         d.text((x, 454 * K), "\u2605", font=sf, fill=INK, anchor="mm")
-    # grandma's WIP polaroid, taped to the corner
-    ph = Image.open(IMG / "grandmas-wip.jpg").convert("RGBA")
-    pw = 210 * K
-    ph = ph.resize((pw, round(pw * ph.height / ph.width)), Image.LANCZOS)
-    pol = Image.new("RGBA", (pw + 20 * K, ph.height + 52 * K), (255, 255, 255, 255))
-    pol.paste(ph, (10 * K, 10 * K))
-    ImageDraw.Draw(pol).text((pol.width // 2, ph.height + 32 * K), "Grandma's WIP", font=ImageFont.truetype(COOPER, 19 * K), fill=(70, 70, 70), anchor="mm")
-    pol = pol.rotate(-8, resample=Image.BICUBIC, expand=True)
-    psh = Image.new("RGBA", pol.size, (0, 0, 0, 0))
-    psh.putalpha(pol.getchannel("A").point(lambda a: a * 0.55))
-    at = (box[2] - pol.width + 70 * K, box[1] - 70 * K)
-    out.alpha_composite(psh.filter(ImageFilter.GaussianBlur(9 * K)), (at[0] + 4 * K, at[1] + 14 * K))
-    out.alpha_composite(pol, at)
     out.convert("RGB").resize((1200, 630), Image.LANCZOS).save(IMG / "og-image.jpg", quality=88, optimize=True, progressive=True)
 
 

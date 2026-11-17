@@ -27,8 +27,6 @@ for wid, name in WALLS.items():
     r, g, b = im.resize((1, 1), Image.LANCZOS).getpixel((0, 0))
     print(f"{wid:9} #{r:02x}{g:02x}{b:02x}  {im.size}  {(OUT / f'{wid}.jpg').stat().st_size // 1024} KB")
 
-# the polaroid in the masthead
-Image.open(SRC / "granny-hooks.jpg").convert("RGB").save(ROOT / "img" / "grandmas-wip.jpg", quality=84, optimize=True)
 
 # ---- credits.html: who took each photo (CC BY / CC BY-SA need this) ----
 import html, re
@@ -36,7 +34,7 @@ SOURCE = {  # what's on the site -> the Commons file it was made from (keys in m
     "Granny squares": "granny", "'70s afghan": "granny2", "Irish chain quilt": "quilt", "Doilies on velvet": "doilies",
     "Big red doily": "doily_red", "Candy dish": "candy", "Blue willow": "willow", "Rose china": "rosechina",
     "Rosebud stripe": "rosestripe", "Calico": "chintz", "Red toile": "toile2", "Chenille bedspread": "chenille",
-    "The good rug": "carpet", "Button tin": "buttons", "Cross-stitch": "xstitch2", "Grandma's WIP (the polaroid)": "granny3",
+    "The good rug": "carpet", "Button tin": "buttons", "Cross-stitch": "xstitch2",
 }
 md = (ROOT / "mockups" / "grandma" / "CREDITS.md").read_text(encoding="utf-8")
 src = {m[0]: m[1:] for m in re.findall(r"^- \*\*(\w+)\*\*: \[(.+?)\]\((.+?)\) by (.+) \((.+?)\)$", md, re.M)}
